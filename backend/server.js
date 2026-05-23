@@ -1,7 +1,7 @@
 import express, { json, urlencoded } from 'express';
 import { photoRoutes } from './routes/photos.js';
 
-const app = express();
+export const app = express();
 
 app.use(express.json());
 app.use("/photos", photoRoutes)
