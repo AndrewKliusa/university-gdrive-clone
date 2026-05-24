@@ -31,6 +31,5 @@ describe("Photos CRUD", () => {
     const retrievedPhoto = Database.Photos.getPhoto(addedPhoto.id)
 
     expect(retrievedPhoto).toBeNullable()
-    expect(retrievedPhoto)
   })
 })
