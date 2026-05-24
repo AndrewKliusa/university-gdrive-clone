@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Database } from "../../database/database";
-
-const dummyPhoto = { name: "test", album_id: null, hash: "123", size_bytes: 123, caption: "test", taken_at: "123" }
+import { dummyPhoto } from "../setup";
 
 describe("Photos CRUD", () => {
   it("Adds a photo", () => {

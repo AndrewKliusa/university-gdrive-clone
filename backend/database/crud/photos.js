@@ -24,11 +24,20 @@ export class PhotoManager {
    * @returns {AddPhotoResponse}
   */
   addPhoto(params) {
+    const normalizedParams = {
+      name: params.name,
+      hash: params.hash,
+      size_bytes: params.size_bytes,
+      album_id: params.album_id ?? null,
+      caption: params.caption ?? null,
+      taken_at: params.taken_at ?? null
+    }
+
     const addQuery = this.Database.prepare(`
       INSERT INTO photo (album_id, name, hash, size_bytes, caption, taken_at) 
       VALUES (@album_id, @name, @hash, @size_bytes, @caption, @taken_at)
     `)
-    const result = addQuery.run(params)
+    const result = addQuery.run(normalizedParams)
 
     return { ...params, id: result.lastInsertRowid }
   }
