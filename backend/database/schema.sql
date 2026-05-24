@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS album (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   name        TEXT    NOT NULL,
+  color       TEXT,
   description TEXT,
   created_at  TEXT    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

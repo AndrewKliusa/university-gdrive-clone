@@ -1,0 +1,37 @@
+table photo {
+  id integer [primary key]
+  album_id integer
+  hash varchar [not null]
+  name varchar [not null]
+  size_bytes integer [not null]
+  caption varchar
+  taken_at timestamp
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+table album {
+  id integer [primary key]
+  name varchar [not null]
+  color varchar
+  description varchar
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+table person {
+  id integer [primary key]
+  name varchar [not null]
+  created_at timestamp [default: `CURRENT_TIMESTAMP`]
+}
+
+table photo_people {
+  photo_id integer [not null]
+  person_id integer [not null]
+
+  indexes {
+    (photo_id, person_id) [pk]
+  }
+}
+
+Ref: photo.album_id > album.id [delete: set null]
+Ref: photo_people.photo_id > photo.id [delete: cascade]
+Ref: photo_people.person_id > person.id [delete: cascade] 
