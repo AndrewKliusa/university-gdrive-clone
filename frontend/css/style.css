@@ -23,18 +23,22 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: auto auto auto;
+  display: flex;
+  flex-flow: row;
+  gap: 10px;
   padding: 10px;
   align-items: start;
 }
 
 .card {
-  width: 25rem;
+  width:12.5rem;
   border: 1px solid;
+  border-radius: 15px;
+  background: #dbeafe;
   display: flex;
   flex-flow: column;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 0.8rem
 }
 
 .photo-container {
@@ -43,18 +47,16 @@
 
 .main-image {
   object-fit: cover;
-  height: 15rem;
-  width: 100%
+  height: 7.5rem;
+  margin-left: 5px;
+  margin-right: 5px;
+
 }
 
 .person-image {
-  width: 2rem;
-  height: 2rem;
+  width: 1.2rem;
+  height: 1.2rem;
   border-radius: 25px;
-}
-
-.card-caption {
-
 }
 
 .images-container {
@@ -76,8 +78,9 @@
   text-align: center;
   border: 1px solid;
   border-radius: 20px;
-  width: 5rem;
-  height: 1.5rem;
+  width: 2rem;
+  height: 1rem;
+  justify-content: center;
 }
 
 .photo-top {
@@ -85,5 +88,34 @@
   grid-template-columns: auto auto auto;
   justify-content: space-between;
   align-items: center;
-  margin: 0.20rem;
+  margin: 0.30rem;
+}
+
+.add-delete-wrapper {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 10px
+}
+
+.add-delete-wrapper > button {
+  border: 1px solid;
+  border-radius: 20px;
+  width: 2rem;
+  height: 2rem;
+}
+
+.add-btn {
+  background-color: rgb(75, 239, 75);
+}
+
+.remove-btn {
+  background-color: rgb(244, 75, 75);
+}
+
+.card-caption {
+  margin: 0.30rem;
 }
