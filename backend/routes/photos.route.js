@@ -1,14 +1,25 @@
 import { Router } from "express";
-import { photoCreateSchema, photoIdSchema, patchPhotoBodySchema } from "../schemas/photo.schema.js";
+import { photoCreateBodySchema, photoCreateFileSchema, photoIdSchema, patchPhotoBodySchema } from "../schemas/photo.schema.js";
 import { validate } from "../middleware/zod.js";
 import { Database } from "../database/database.js";
+import multer from "multer";
 import z from "zod";
 
 export const photoRoutes = Router();
+const upload = multer({ dest: "photos/" })
 
-photoRoutes.post("/", validate({ body: photoCreateSchema }), (req, res, next) => {
+photoRoutes.post("/", validate({ body: photoCreateBodySchema, file: photoCreateFileSchema }), upload.single(upload), (req, res, next) => {
   try {
-    const photo = Database.Photos.addPhoto(req.body)
+    const photoParams = { 
+      album_id: req.body.album_id,
+      caption: req.body.caption,
+      hash: req.file.filename,
+      taken_at: req.body.taken_at,
+      name: req.file.name,
+      size_bytes: req.file.size_bytes
+    }
+
+    const photo = Database.Photos.addPhoto(photoParams)
     res.status(201).json(photo)
   } catch (err) {
     next(err)

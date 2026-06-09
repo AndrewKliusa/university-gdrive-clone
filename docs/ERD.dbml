@@ -10,6 +10,7 @@ table photo {
 }
 
 table album {
+  photo_id integer
   id integer [primary key]
   name varchar [not null]
   color varchar
@@ -19,6 +20,7 @@ table album {
 
 table person {
   id integer [primary key]
+  photo_id integer
   name varchar [not null]
   created_at timestamp [default: `CURRENT_TIMESTAMP`]
 }
@@ -35,3 +37,5 @@ table photo_people {
 Ref: photo.album_id > album.id [delete: set null]
 Ref: photo_people.photo_id > photo.id [delete: cascade]
 Ref: photo_people.person_id > person.id [delete: cascade] 
+Ref: album.photo_id > photo.id [delete: set null]
+Ref: person.photo_id > photo.id [delete: set null]
