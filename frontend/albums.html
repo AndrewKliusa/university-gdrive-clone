@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo Drive</title>
-    <link rel="stylesheet" href="css/albums.css">
     <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/albums.css">
   </head>
   <body>
     <script src="index.js" defer></script>
@@ -19,12 +19,21 @@
     </nav>
     <div class="grid">
       <div class="card">
+        <div class="top-text-wrapper">
+          <span class="date-text">3 photos</span>
+          <span class="album-text">My Home</span>
+          <span class="date-text">10MB size</span>
+        </div> 
         <div class="album-images-wrapper">
           <img class="album-image" src="resources/test_cropped.jpg">
           <img class="album-image" src="resources/cat_cropped.png">
           <img class="album-image" src="resources/cat_cropped.png">
         </div>
       </div>
+    </div>
+    <div class="add-delete-wrapper">
+        <button class="add-btn">✚</button>
+        <button class="remove-btn">✖</button>
     </div>
   </body>
 </html>

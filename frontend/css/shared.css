@@ -8,6 +8,11 @@
   font-weight: 700;
   height: 50px;
   border-radius: 20px;
+  margin-left: 0.3rem;
+  margin-right: 0.3rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.3rem;
+
 }
 
 .nav-links {
@@ -20,10 +25,68 @@
   margin-left: 2rem;
 }
 
+body {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
 .grid {
+  flex: 1;
   display: flex;
   flex-flow: row;
+  flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
   align-items: start;
+  background-color: rgb(0, 136, 255);
+  margin: 0.3rem;
+  border-radius: 20px;
+}
+
+.album-text {
+  text-align: center;
+  border: 1px solid;
+  border-radius: 20px;
+  width: fit-content;
+  height: 1rem;
+  justify-content: center;
+  padding: 0 0.3rem;
+}
+
+.card {
+  width: 12.5rem;
+  border: 0.5px solid;
+  border-radius: 15px;
+  background: #dbeafe;
+  display: flex;
+  flex-flow: column;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 0.8rem
+}
+
+.add-delete-wrapper {
+  display: flex;
+  justify-content: space-between;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 10px
+}
+
+.add-delete-wrapper > button {
+  border: 1px solid;
+  border-radius: 20px;
+  width: 2rem;
+  height: 2rem;
+}
+
+.add-btn {
+  background-color: rgb(75, 239, 75);
+}
+
+.remove-btn {
+  background-color: rgb(244, 75, 75);
 }

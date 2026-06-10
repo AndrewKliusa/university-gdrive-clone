@@ -1,14 +1,3 @@
-.card {
-  width:12.5rem;
-  border: 0.5px solid;
-  border-radius: 15px;
-  background: #dbeafe;
-  display: flex;
-  flex-flow: column;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-size: 0.8rem
-}
-
 .photo-container {
   flex: 1;
 }
@@ -47,47 +36,12 @@
   opacity: 50%;
 }
 
-.album-text {
-  text-align: center;
-  border: 1px solid;
-  border-radius: 20px;
-  width: fit-content;
-  height: 1rem;
-  justify-content: center;
-  padding: 0 0.3rem;
-}
-
 .photo-top {
   display: grid;
   grid-template-columns: auto auto auto;
   justify-content: space-between;
   align-items: center;
   margin: 0.30rem;
-}
-
-.add-delete-wrapper {
-  display: flex;
-  justify-content: space-between;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 10px
-}
-
-.add-delete-wrapper > button {
-  border: 1px solid;
-  border-radius: 20px;
-  width: 2rem;
-  height: 2rem;
-}
-
-.add-btn {
-  background-color: rgb(75, 239, 75);
-}
-
-.remove-btn {
-  background-color: rgb(244, 75, 75);
 }
 
 .card-caption {

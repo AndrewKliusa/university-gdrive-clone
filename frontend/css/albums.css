@@ -1,12 +1,5 @@
 .card {
   width: fit-content;
-  border: 0.5px solid;
-  border-radius: 15px;
-  background: #dbeafe;
-  display: flex;
-  flex-flow: column;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-  font-size: 0.8rem
 }
 
 .album-image {
@@ -34,4 +27,12 @@
   flex-flow: row;
   margin: 1rem;
   gap: 2rem
+}
+
+.top-text-wrapper {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.30rem;
 }
