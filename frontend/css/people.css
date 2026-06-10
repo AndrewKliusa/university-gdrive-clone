@@ -22,10 +22,50 @@
 .add-person-btn,
 .person-image {
   width: 8rem;
+  height: 7.5rem;
   border: 2px solid;
   border-radius: 70px;
 }
 
+.person-image:hover {
+  border-color: red;
+  cursor: pointer;
+  transform: scale(1.05);
+  transition: transform 0.15s ease;
+}
+
+.image-and-overlay:hover .person-image {
+  opacity: 0.3;
+}
+
+.image-and-overlay:hover .delete-overlay {
+  display: grid;
+}
+
+.delete-overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  place-items: center;
+  font-size: 3rem;
+  cursor: pointer;
+}
+
+.image-and-overlay {
+  position: relative;
+}
+
 .add-person-btn {
   font-size: 40px;
+  height: 7.5rem;
+}
+
+.avatar-name-wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+}
+
+.avatar-name-wrapper > span {
+  font-size: 18px;
 }

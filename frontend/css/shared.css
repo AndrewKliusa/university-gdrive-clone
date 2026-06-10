@@ -45,6 +45,10 @@ body {
   border-radius: 20px;
 }
 
+body {
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 .album-text {
   text-align: center;
   border: 1px solid;
@@ -62,7 +66,6 @@ body {
   background: #dbeafe;
   display: flex;
   flex-flow: column;
-  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   font-size: 0.8rem
 }
 
