@@ -1,13 +1,31 @@
 .people-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: start;
   flex: 1;
   gap: 10px;
   padding: 10px;
-  align-items: start;
+  padding-top: 1rem;
   background-color: rgb(0, 136, 255);
   margin: 0.3rem;
   border-radius: 20px;
 }
 
-.person-image
+.person-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 27rem;
+}
+
+.add-person-btn,
+.person-image {
+  width: 8rem;
+  border: 2px solid;
+  border-radius: 70px;
+}
+
+.add-person-btn {
+  font-size: 40px;
+}
