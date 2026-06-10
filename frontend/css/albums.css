@@ -1,29 +1,37 @@
-.navigation {
+.card {
+  width: fit-content;
+  border: 0.5px solid;
+  border-radius: 15px;
+  background: #dbeafe;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgb(139, 223, 246);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: large;
-  font-weight: 700;
-  height: 50px;
+  flex-flow: column;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 0.8rem
+}
+
+.album-image {
+  width: 5rem;
+  height: 5rem;
+  margin-left: -3rem;
   border-radius: 20px;
 }
 
-.nav-links {
-  display: flex;
-  gap: 1rem;
-  margin-right: 2rem;
+.album-image:first-child {
+  margin-left: 0;
+  transform: rotate(-20deg);
 }
 
-.navigation-span {
-  margin-left: 2rem;
+.album-image:nth-child(2) {
+  transform: translateY(-0.5rem)
 }
 
-.grid {
+.album-image:nth-child(3) {
+  transform: rotate(20deg);
+}
+
+.album-images-wrapper {
   display: flex;
   flex-flow: row;
-  gap: 10px;
-  padding: 10px;
-  align-items: start;
+  margin: 1rem;
+  gap: 2rem
 }
