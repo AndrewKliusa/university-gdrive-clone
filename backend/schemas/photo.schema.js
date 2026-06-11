@@ -1,7 +1,7 @@
 import z from "zod";
 
 export const photoCreateBodySchema = z.object({
-  album_id: z.number().int().positive().nullish(),
+  album_id: z.coerce.number().int().positive().nullish(),
   caption: z.string().nullish(),
   taken_at: z.string().nullish()
 })
