@@ -38,17 +38,26 @@
   opacity: 0.3;
 }
 
-.image-and-overlay:hover .delete-overlay {
-  display: grid;
+.image-and-overlay:hover .overlay-buttons {
+  display: flex;
 }
 
-.delete-overlay {
+.overlay-buttons {
   display: none;
   position: absolute;
   inset: 0;
+}
+
+.overlay-buttons span {
+  flex: 1;
+  display: grid;
   place-items: center;
-  font-size: 3rem;
+  font-size: 2rem;
   cursor: pointer;
+}
+
+.edit-overlay {
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
 }
 
 .image-and-overlay {

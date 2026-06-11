@@ -18,7 +18,7 @@
         </div>
     </nav>
     <div class="grid">
-      <div class="card">
+      <div class="card photo-hover">
         <div class="photo-top">
           <span class="date-text">04.03.08</span>
           <div class="people-images-wrapper">
@@ -33,7 +33,7 @@
         <img class="main-image" src="resources/cat.png">
         <span class="card-caption">sdfgfsgsfdgsfd sdfgdfsgfsgsdfgd dfsgsdfgdf</span>
       </div>
-      <div class="card">
+      <div class="card photo-hover">
         <div class="photo-top">
           <span class="date-text">04 March 2008</span>
           <div class="people-images-wrapper">
@@ -48,9 +48,19 @@
         <span class="card-caption">sdfgfsgsfdgsfd sdfgdfsgfsgsdfgd dfsgsdfgdf</span>
       </div>
     </div>
-    <div class="add-delete-wrapper">
-        <button class="add-btn">✚</button>
-        <button class="remove-btn">✖</button>
+    <div class="add-delete-edit-wrapper">
+      <button class="add-btn">➕</button>
+      <div class="edit-remove-container">
+        <button class="edit-btn">✏️</button>
+        <button class="remove-btn">🗑️</button>
+      </div>
     </div>
+    <dialog id="add-dialog">
+      <form>
+        <input type="text" placeholder="Name">
+        <button type="submit">Add</button>
+      </form>
+      <button class="close-dialog">Cancel</button>
+    </dialog>
   </body>
 </html>

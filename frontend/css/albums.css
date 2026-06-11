@@ -2,11 +2,25 @@
   width: fit-content;
 }
 
+.card:hover .album-image:first-child {
+  margin-left: 0;
+  transform: translate(-0.5rem, -0.3rem) rotate(-30deg);
+}
+
+.card:hover .album-image:nth-child(2) {
+  transform: translateY(-1rem);
+}
+
+.card:hover .album-image:nth-child(3) {
+  transform: translate(0.5rem, -0.3rem) rotate(30deg);
+}
+
 .album-image {
   width: 5rem;
   height: 5rem;
   margin-left: -3rem;
   border-radius: 20px;
+  transition: transform 0.25s ease;
 }
 
 .album-image:first-child {

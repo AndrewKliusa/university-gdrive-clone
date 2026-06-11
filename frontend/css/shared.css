@@ -69,7 +69,7 @@ body {
   font-size: 0.8rem
 }
 
-.add-delete-wrapper {
+.add-delete-edit-wrapper {
   display: flex;
   justify-content: space-between;
   position: fixed;
@@ -79,11 +79,25 @@ body {
   margin: 10px
 }
 
-.add-delete-wrapper > button {
+.edit-remove-container > *,
+.add-delete-edit-wrapper > .add-btn {
   border: 1px solid;
   border-radius: 20px;
   width: 2rem;
   height: 2rem;
+  transition: transform 0.25s ease;
+}
+
+.add-delete-edit-wrapper > .add-btn:hover {
+  transform: translate(0.5rem, -0.3rem) scale(1.5);
+}
+
+.edit-remove-container > *:hover {
+  transform: translate(-0.5rem, -0.3rem) scale(1.5);
+}
+
+.edit-remove-container:has(.remove-btn:hover) .edit-btn {
+  transform: translateX(-1rem)
 }
 
 .add-btn {
@@ -92,4 +106,8 @@ body {
 
 .remove-btn {
   background-color: rgb(244, 75, 75);
+}
+
+.edit-btn {
+  background-color: rgb(238, 242, 0);
 }
