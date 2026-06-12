@@ -49,6 +49,15 @@ export class PhotoManager {
   */
 
   /**
+   * @returns {Photo[]}
+   */
+  getAllPhotos() {
+    const getAllQuery = this.Database.prepare('SELECT * FROM photo ORDER BY created_at DESC')
+    const results = getAllQuery.all()
+    return results.map(r => ({ ...r, created_at: new Date(r.created_at) }))
+  }
+
+  /**
    * @param {string} id 
    * @returns {Photo}
    */

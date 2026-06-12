@@ -4,6 +4,8 @@ import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 import { PhotoManager } from './crud/photos.js'
+import { AlbumManager } from './crud/album.js'
+import { PersonManager } from './crud/person.js'
 
 dotenv.config();
 
@@ -21,6 +23,8 @@ dotenv.config();
 export const Database = new DatabaseDriver(process.env.DATABASE_PATH)
 
 Database.Photos = new PhotoManager(Database)
+Database.Albums = new AlbumManager(Database)
+Database.Persons = new PersonManager(Database)
 
 Database.pragma('foreign_keys = ON')
 

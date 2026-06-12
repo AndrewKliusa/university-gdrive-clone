@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { Database } from "../../database/database";
-import { dummyPhoto } from "../setup";
+import { dummyPhoto, dummyPhotoTwo } from "../setup";
 
 describe("Photos CRUD", () => {
   it("Adds a photo", () => {
@@ -31,5 +31,13 @@ describe("Photos CRUD", () => {
     const retrievedPhoto = Database.Photos.getPhoto(addedPhoto.id)
 
     expect(retrievedPhoto).toBeNullable()
+  })
+
+  it("Gets all photos", () => {
+    Database.Photos.addPhoto(dummyPhoto)
+    Database.Photos.addPhoto(dummyPhotoTwo)
+
+    const allPhotos = Database.Photos.getAllPhotos()
+    expect(allPhotos).toHaveLength(2)
   })
 })

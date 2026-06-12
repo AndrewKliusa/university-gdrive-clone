@@ -6,6 +6,15 @@ import { upload } from "../middleware/multer.js";
 
 export const photoRoutes = Router();
 
+photoRoutes.get("/", (req, res, next) => {
+  try {
+    const photos = Database.Photos.getAllPhotos()
+    res.status(200).json(photos)
+  } catch (err) {
+    next(err)
+  }
+});
+
 photoRoutes.post("/", upload.single("photo"), validate({ body: photoCreateBodySchema, file: photoCreateFileSchema }), (req, res, next) => {
   try {
     const photoParams = { 

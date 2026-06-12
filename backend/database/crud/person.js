@@ -52,6 +52,12 @@ export class PersonManager {
     return result ? { ...result, created_at: new Date(result.created_at) } : null
   }
 
+  getAllPersons() {
+    const getAllQuery = this.Database.prepare('SELECT * FROM person ORDER BY created_at DESC')
+    const results = getAllQuery.all()
+    return results.map(r => ({ ...r, created_at: new Date(r.created_at) }))
+  }
+
   /**
    * @typedef {Object} EditPersonData
    * @property {string} [name]

@@ -56,6 +56,12 @@ export class AlbumManager {
     return result ? { ...result, created_at: new Date(result.created_at) } : null
   }
 
+  getAllAlbums() {
+    const getAllQuery = this.Database.prepare('SELECT * FROM album ORDER BY created_at DESC')
+    const results = getAllQuery.all()
+    return results.map(r => ({ ...r, created_at: new Date(r.created_at) }))
+  }
+
   /**
    * @typedef {Object} EditAlbumData
    * @property {string} [name]

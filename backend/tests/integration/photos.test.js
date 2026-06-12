@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { app } from '../../server'
+import request from 'supertest'
 import { crudBuilder, dummyPhoto, dummyPhotoTwo } from "../setup";
 
 const { post: addPhoto, get: getPhoto, patch: updatePhoto, delete: removePhoto } = crudBuilder("photos")
@@ -51,5 +52,16 @@ describe('Photo routes', () => {
 
     const removeRes = await removePhoto(123)
     expect(removeRes.status).toBe(404)
+  })
+
+  it("Gets all photos", async () => {
+    await addPhoto(dummyPhoto)
+    await addPhoto(dummyPhotoTwo)
+
+    const res = await request(app).get('/photos')
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(2)
+    expect(res.body[0].name).toBe(dummyPhotoTwo.name)
+    expect(res.body[1].name).toBe(dummyPhoto.name)
   })
 })
