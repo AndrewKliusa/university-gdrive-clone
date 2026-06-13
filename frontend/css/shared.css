@@ -74,6 +74,11 @@ body {
   border-color: yellow;
 }
 
+.remove-hover:hover {
+  border: 3px solid;
+  border-color: red;
+}
+
 .add-delete-edit-wrapper {
   display: flex;
   justify-content: space-between;

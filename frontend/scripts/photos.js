@@ -3,6 +3,66 @@ let deleteModeActive = false;
 
 loadPhotos()
 
+document.querySelector('.submit-btn.add').addEventListener('click', async (event) => {
+  const form = document.querySelector('.add-form')
+  const data = new FormData(form)
+
+  const [response, error] = await catchError(fetch('http://localhost:3000/photos', {
+    method: 'POST',
+    body: data
+  }))
+
+  if (error || !response.ok) return alert("Failed to upload your photo: " + (error ? error.stack : response.status))
+
+  const responseData = await response.json()
+  addPhoto(responseData)
+
+  addDialog.close()
+})
+
+document.querySelector('.grid').addEventListener('click', async (event) => {
+  const card = event.target.closest('.card')
+  if (!card) return
+
+  if (editModeActive) {
+    editDialog.querySelector('.edit-form').id += card.id
+    editDialog.showModal()
+  } else if (deleteModeActive) {
+    card.remove()
+    await removePhoto(card.id)
+  }  
+})
+
+document.querySelector('.edit-btn').addEventListener('click', async (event) => {
+  editModeActive = !editModeActive
+
+  addClassToCardsIf(deleteModeActive, "edit-hover");
+})
+
+document.querySelector('.submit-btn.edit').addEventListener('click', async (event) => {
+  const form = document.querySelector('.edit-form')
+  const data = new FormData(form)
+  const photoId = form.id.split('-')[1]
+
+  const [response, error] = await catchError(fetch(`http://localhost:3000/photos/${photoId}`, {
+    method: 'PATCH',
+    body: data
+  }))
+
+  if (error || !response.ok) return alert("Failed to edit your photo: " + (error ? error.stack : response.status))
+
+  const responseData = await response.json()
+
+  editDialog.close()
+  location.reload()
+})
+
+document.querySelector('.remove-btn').addEventListener('click', async (event) => {
+  deleteModeActive = !deleteModeActive
+
+  addClassToCardsIf(deleteModeActive, "remove-hover");
+})
+
 function addPhoto(photoData) {
   const cardsGrid = document.querySelector(".grid")
   cardsGrid.innerHTML += `
@@ -35,64 +95,21 @@ async function loadPhotos() {
   responseData.forEach(addPhoto)
 }
 
-document.querySelector('.submit-btn.add').addEventListener('click', async (event) => {
-  const form = document.querySelector('.add-form')
-  const data = new FormData(form)
-
-  const [response, error] = await catchError(fetch('http://localhost:3000/photos', {
-    method: 'POST',
-    body: data
+async function removePhoto(cardId) {
+  const [response, error] = await catchError(fetch(`http://localhost:3000/photos/${cardId}`, {
+    method: 'DELETE',
   }))
 
-  if (error || !response.ok) return alert("Failed to upload your photo: " + (error ? error.stack : response.status))
+  if (error || !response.ok) return alert("Failed to delete your photo: " + (error ? error.stack : response.status))
+}
 
-  const responseData = await response.json()
-  addPhoto(responseData)
+function addClassToCardsIf(condition, className) {
+  const grid = document.querySelector('.grid');
+  const cards = [...grid.children];
 
-  addDialog.close()
-})
-
-document.querySelector('.grid').addEventListener('click', (event) => {
-  const card = event.target.closest('.card')
-
-  if (!card) return
-  if (!editModeActive) return
-
-  editDialog.querySelector('.edit-form').id += card.id
-  editDialog.showModal()
-})
-
-document.querySelector('.edit-btn').addEventListener('click', async (event) => {
-  editModeActive = !editModeActive
-  
-  const grid = document.querySelector('.grid')
-  const cards = [...grid.children]
-
-  if (editModeActive) {
-    cards.forEach((card) => card.classList.add("edit-hover"))
+  if (condition) {
+    cards.forEach((card) => card.classList.add(className));
   } else {
-    cards.forEach((card) => card.classList.remove("edit-hover"))
+    cards.forEach((card) => card.classList.remove(className));
   }
-})
-
-document.querySelector('.submit-btn.edit').addEventListener('click', async (event) => {
-  const form = document.querySelector('.edit-form')
-  const data = new FormData(form)
-  const photoId = form.id.split('-')[1]
-
-  const [response, error] = await catchError(fetch(`http://localhost:3000/photos/${photoId}`, {
-    method: 'PATCH',
-    body: data
-  }))
-
-  if (error || !response.ok) return alert("Failed to edit your photo: " + (error ? error.stack : response.status))
-
-  const responseData = await response.json()
-
-  editDialog.close()
-  location.reload()
-})
-
-document.querySelector('.remove-btn').addEventListener('click', async (event) => {
-
-})
+}
