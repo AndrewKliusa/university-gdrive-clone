@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Database } from "../database/database.js";
 import { personCreateBodySchema, personIdSchema, patchPersonBodySchema } from "../schemas/person.schema.js";
 import { validate } from "../middleware/zod.js";
+import { upload } from "../middleware/multer.js";
 
 export const personRoutes = Router();
 
@@ -14,7 +15,7 @@ personRoutes.get("/", (req, res, next) => {
   }
 });
 
-personRoutes.post("/", validate({ body: personCreateBodySchema }), (req, res, next) => {
+personRoutes.post("/", upload.none(), validate({ body: personCreateBodySchema }), (req, res, next) => {
   try {
     const personParams = {
       name: req.body.name,
@@ -39,7 +40,7 @@ personRoutes.get("/:id", validate({ params: personIdSchema }), (req, res, next) 
   }
 });
 
-personRoutes.patch("/:id", validate({ params: personIdSchema, body: patchPersonBodySchema }), (req, res, next) => {
+personRoutes.patch("/:id", upload.none(), validate({ params: personIdSchema, body: patchPersonBodySchema }), (req, res, next) => {
   try {
     const existingPerson = Database.Persons.getPerson(req.params.id)
     if (!existingPerson) return next({ status: 404, message: "Person with this id was not found" })

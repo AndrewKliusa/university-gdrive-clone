@@ -1,7 +1,12 @@
 import z from "zod";
 
+const optionalId = z.preprocess(
+  (val) => val === '' ? undefined : val,
+  z.coerce.number().int().positive().nullish()
+)
+
 export const photoCreateBodySchema = z.object({
-  album_id: z.coerce.number().int().positive().nullish(),
+  album_id: optionalId,
   caption: z.string().nullish(),
   taken_at: z.string().nullish()
 })

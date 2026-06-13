@@ -1,9 +1,11 @@
 import z from "zod";
 
+const requiredId = z.coerce.number().int().positive()
+
 export const personCreateBodySchema = z.object({
   name: z.string().min(1),
-  photo_id: z.coerce.number().int().positive().nullish(),
-  avatar_id: z.coerce.number().int().positive().nullish()
+  photo_id: requiredId,
+  avatar_id: requiredId
 })
 
 export const personIdSchema = z.object({ id: z.string() })

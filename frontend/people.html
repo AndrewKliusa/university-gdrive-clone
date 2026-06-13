@@ -9,6 +9,7 @@
   </head>
   <body>
     <script src="scripts/shared.js" defer></script>
+    <script src="scripts/people.js" defer></script>
     <nav class="navigation">
         <span class="navigation-span">Photo Drive</span>
         <div class="nav-links">
@@ -19,48 +20,52 @@
     </nav>
     <div class="people-grid">
       <div class="person-container">
-        <div class="avatar-name-wrapper">
-          <div class="image-and-overlay">
-            <div class="overlay-buttons">
-              <span class="edit-overlay">✏️</span>
-              <span class="delete-overlay">🗑️</span>
-            </div>
-            <img class="person-image" src="resources/cat_cropped.png">
-          </div>
-          <span>Andrew</span>
-        </div>
-        <div class="avatar-name-wrapper">
-          <div class="image-and-overlay">
-            <div class="overlay-buttons">
-              <span class="edit-overlay">✏️</span>
-              <span class="delete-overlay">🗑️</span>
-            </div>
-            <img class="person-image" src="resources/cat_cropped.png">
-          </div>
-          <span>Andrew</span>
-        </div>
-        <div class="avatar-name-wrapper">
-          <div class="image-and-overlay">
-            <div class="overlay-buttons">
-              <span class="edit-overlay">✏️</span>
-              <span class="delete-overlay">🗑️</span>
-            </div>
-            <img class="person-image" src="resources/cat_cropped.png">
-          </div>
-          <span>Andrew</span>
-        </div>
-        <div class="avatar-name-wrapper">
-          <div class="image-and-overlay">
-            <div class="overlay-buttons">
-              <span class="edit-overlay">✏️</span>
-              <span class="delete-overlay">🗑️</span>
-            </div>
-            <img class="person-image" src="resources/cat_cropped.png">
-          </div>
-          <span>Andrew</span>
-        </div>
         <button class="add-person-btn">✚</button>
       </div>
     </div>
+    <dialog class="add-dialog">
+      <form class="add-form">
+        <span class="add-text">Add person</span>
+
+        <span class="input-label">Name</span>
+        <input type="text" name="name" required>
+
+        <span class="input-label">Avatar photo</span>
+        <select name="avatar_id" required>
+          <option value="">Choose a photo…</option>
+        </select>
+
+        <span class="input-label">Linked photo</span>
+        <select name="photo_id" required>
+          <option value="">Choose a photo…</option>
+        </select>
+      </form>
+      <div class="form-actions">
+        <button type="button" class="submit-btn add">Add person</button>
+        <button type="button" class="close-btn add">Cancel</button>
+      </div>
+    </dialog>
+    <dialog class="edit-dialog">
+      <form class="edit-form" id="target-">
+        <span class="edit-text">Edit person</span>
+
+        <span class="input-label">Name</span>
+        <input type="text" name="name" required>
+
+        <span class="input-label">Avatar photo</span>
+        <select name="avatar_id" required>
+          <option value="">Choose a photo…</option>
+        </select>
+
+        <span class="input-label">Linked photo</span>
+        <select name="photo_id" required>
+          <option value="">Choose a photo…</option>
+        </select>
+        <div class="form-actions">
+          <button type="button" class="submit-btn edit">Edit person</button>
+          <button type="button" class="close-btn edit">Cancel</button>
+        </div>
+      </form>
+    </dialog>
   </body>
 </html>

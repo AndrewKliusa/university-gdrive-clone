@@ -1,17 +1,26 @@
 const addDialog = document.querySelector('.add-dialog')
 const editDialog = document.querySelector('.edit-dialog')
 
-document.querySelector('.add-btn').addEventListener('click', () => {
-  addDialog.showModal()
-})
+const addBtn = document.querySelector('.add-btn')
+if (addBtn) {
+  addBtn.addEventListener('click', () => {
+    addDialog.showModal()
+  })
+}
 
-document.querySelector('.close-btn.add').addEventListener('click', () => {
-  addDialog.close()
-})
+const closeAddBtn = document.querySelector('.close-btn.add')
+if (closeAddBtn) {
+  closeAddBtn.addEventListener('click', () => {
+    addDialog.close()
+  })
+}
 
-document.querySelector('.close-btn.edit').addEventListener('click', () => {
-  editDialog.close()
-})
+const closeEditBtn = document.querySelector('.close-btn.edit')
+if (closeEditBtn) {
+  closeEditBtn.addEventListener('click', () => {
+    editDialog.close()
+  })
+}
 
 async function catchError(input) {
   try {
