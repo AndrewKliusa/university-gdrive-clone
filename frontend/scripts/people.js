@@ -13,12 +13,11 @@ document.querySelector('.submit-btn.add').addEventListener('click', async (event
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
 
-  const [response, error] = await catchError(fetch('http://localhost:3000/people', {
+  const response = await fetchRequest(fetch('http://localhost:3000/people', {
     method: 'POST',
     body: data
-  }))
-
-  if (error || !response.ok) return alert("Failed to add your person: " + (error ? error.stack : response.status))
+  }), 'add your person')
+  if (!response) return
 
   const responseData = await response.json()
   addPerson(responseData)
@@ -43,11 +42,10 @@ document.querySelector('.people-grid').addEventListener('click', async (event) =
   } else if (event.target.closest('.delete-overlay')) {
     wrapper.remove()
 
-    const [response, error] = await catchError(fetch(`http://localhost:3000/people/${wrapper.id}`, {
+    const response = await fetchRequest(fetch(`http://localhost:3000/people/${wrapper.id}`, {
       method: 'DELETE',
-    }))
-
-    if (error || !response.ok) return alert("Failed to delete your person: " + (error ? error.stack : response.status))
+    }), 'delete your person')
+    if (!response) return
   }
 })
 
@@ -56,12 +54,11 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async (even
   const data = new FormData(form)
   const personId = form.id.split('-')[1]
 
-  const [response, error] = await catchError(fetch(`http://localhost:3000/people/${personId}`, {
+  const response = await fetchRequest(fetch(`http://localhost:3000/people/${personId}`, {
     method: 'PATCH',
     body: data
-  }))
-
-  if (error || !response.ok) return alert("Failed to edit your person: " + (error ? error.stack : response.status))
+  }), 'edit your person')
+  if (!response) return
 
   editDialog.close()
   location.reload()
@@ -91,11 +88,10 @@ function addPerson(personData) {
 
 async function loadPeople() {
   if (!Object.keys(photosById).length) {
-    const [photosRes, photosErr] = await catchError(fetch('http://localhost:3000/photos', {
+    const photosRes = await fetchRequest(fetch('http://localhost:3000/photos', {
       method: 'GET',
-    }))
-
-    if (photosErr || !photosRes.ok) return alert("Failed to load photos: " + (photosErr ? photosErr.stack : photosRes.status))
+    }), 'load photos')
+    if (!photosRes) return
 
     const photosData = await photosRes.json()
     photosData.forEach(photo => { photosById[photo.id] = photo })
@@ -116,11 +112,10 @@ async function loadPeople() {
 
   document.querySelectorAll('.avatar-name-wrapper').forEach(el => el.remove())
 
-  const [response, error] = await catchError(fetch(`http://localhost:3000/people${query ? `?${query}` : ''}`, {
+  const response = await fetchRequest(fetch(`http://localhost:3000/people${query ? `?${query}` : ''}`, {
     method: 'GET',
-  }))
-
-  if (error || !response.ok) return alert("Failed to load your people: " + (error ? error.stack : response.status))
+  }), 'load your people')
+  if (!response) return
 
   const responseData = await response.json()
   responseData.forEach(addPerson)

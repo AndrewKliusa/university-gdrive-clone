@@ -13,12 +13,11 @@ document.querySelector('.submit-btn.add').addEventListener('click', async (event
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
 
-  const [response, error] = await catchError(fetch('http://localhost:3000/photos', {
+  const response = await fetchRequest(fetch('http://localhost:3000/photos', {
     method: 'POST',
     body: data
-  }))
-
-  if (error || !response.ok) return alert("Failed to upload your photo: " + (error ? error.stack : response.status))
+  }), 'upload your photo')
+  if (!response) return
 
   const responseData = await response.json()
   addPhoto(responseData)
@@ -47,11 +46,10 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
   } else if (deleteModeActive) {
     card.remove()
 
-    const [response, error] = await catchError(fetch(`http://localhost:3000/photos/${card.id}`, {
+    const response = await fetchRequest(fetch(`http://localhost:3000/photos/${card.id}`, {
       method: 'DELETE',
-    }))
-
-    if (error || !response.ok) return alert("Failed to delete your photo: " + (error ? error.stack : response.status))
+    }), 'delete your photo')
+    if (!response) return
   }  
 })
 
@@ -68,12 +66,11 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async (even
   const data = new FormData(form)
   const photoId = form.id.split('-')[1]
 
-  const [response, error] = await catchError(fetch(`http://localhost:3000/photos/${photoId}`, {
+  const response = await fetchRequest(fetch(`http://localhost:3000/photos/${photoId}`, {
     method: 'PATCH',
     body: data
-  }))
-
-  if (error || !response.ok) return alert("Failed to edit your photo: " + (error ? error.stack : response.status))
+  }), 'edit your photo')
+  if (!response) return
 
   editDialog.close()
   location.reload()
@@ -142,11 +139,10 @@ async function fetchPhotos() {
 
   document.querySelector('.grid').innerHTML = ''
 
-  const [response, error] = await catchError(fetch(`http://localhost:3000/photos${query ? `?${query}` : ''}`, {
+  const response = await fetchRequest(fetch(`http://localhost:3000/photos${query ? `?${query}` : ''}`, {
     method: 'GET',
-  }))
-
-  if (error || !response.ok) return alert("Failed to load photos: " + (error ? error.stack : response.status))
+  }), 'load photos')
+  if (!response) return
 
   const responseData = await response.json()
   responseData.forEach(photo => { photosById[photo.id] = photo })
@@ -154,11 +150,10 @@ async function fetchPhotos() {
 }
 
 async function loadPhotos() {
-  const [albumsRes, albumsErr] = await catchError(fetch('http://localhost:3000/albums', {
+  const albumsRes = await fetchRequest(fetch('http://localhost:3000/albums', {
     method: 'GET',
-  }))
-
-  if (albumsErr || !albumsRes.ok) return alert("Failed to load albums: " + (albumsErr ? albumsErr.stack : albumsRes.status))
+  }), 'load albums')
+  if (!albumsRes) return
 
   const albumsData = await albumsRes.json()
   albumsData.forEach(album => { albumsById[album.id] = album })
@@ -173,11 +168,10 @@ async function loadPhotos() {
 
   document.querySelector('[name="filter_album_id"]').innerHTML = `<option value="">All albums</option>${albumOptions}`
 
-  const [peopleRes, peopleErr] = await catchError(fetch('http://localhost:3000/people', {
+  const peopleRes = await fetchRequest(fetch('http://localhost:3000/people', {
     method: 'GET',
-  }))
-
-  if (peopleErr || !peopleRes.ok) return alert("Failed to load people: " + (peopleErr ? peopleErr.stack : peopleRes.status))
+  }), 'load people')
+  if (!peopleRes) return
 
   const peopleData = await peopleRes.json()
   peopleData.forEach(person => { personsById[person.id] = person })

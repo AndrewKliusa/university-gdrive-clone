@@ -1,36 +1,37 @@
 const addDialog = document.querySelector('.add-dialog')
 const editDialog = document.querySelector('.edit-dialog')
 
-const addBtn = document.querySelector('.add-btn')
-if (addBtn) {
-  addBtn.addEventListener('click', () => {
-    addDialog.showModal()
-  })
-}
+document.querySelector('.add-btn')?.addEventListener('click', () => {
+  addDialog.showModal()
+})
 
-const closeAddBtn = document.querySelector('.close-btn.add')
-if (closeAddBtn) {
-  closeAddBtn.addEventListener('click', () => {
-    addDialog.close()
-  })
-}
+document.querySelector('.close-btn.add')?.addEventListener('click', () => {
+  addDialog.close()
+})
 
-const closeEditBtn = document.querySelector('.close-btn.edit')
-if (closeEditBtn) {
-  closeEditBtn.addEventListener('click', () => {
-    editDialog.close()
-  })
-}
+document.querySelector('.close-btn.edit')?.addEventListener('click', () => {
+  editDialog.close()
+})
 
-async function catchError(input) {
+async function apiError(response) {
   try {
-    const result = typeof input === "function"
-      ? await input()
-      : await input;
+    const body = await response.json()
+    if (body.error) return body.error
+  } catch {}
+  return 'Something went wrong. Please try again.'
+}
 
-    return [result, null];
+async function fetchRequest(promise, action) {
+  try {
+    const response = await promise
+    if (!response.ok) {
+      alert(`Failed to ${action}: ${await apiError(response)}`)
+      return null
+    }
+    return response
   } catch (err) {
-    return [null, err];
+    alert(`Failed to ${action}: ${err.message}`)
+    return null
   }
 }
 

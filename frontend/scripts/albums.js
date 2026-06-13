@@ -12,12 +12,11 @@ document.querySelector('.submit-btn.add').addEventListener('click', async (event
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
 
-  const [response, error] = await catchError(fetch('http://localhost:3000/albums', {
+  const response = await fetchRequest(fetch('http://localhost:3000/albums', {
     method: 'POST',
     body: data
-  }))
-
-  if (error || !response.ok) return alert("Failed to upload your album: " + (error ? error.stack : response.status))
+  }), 'upload your album')
+  if (!response) return
 
   const responseData = await response.json()
   addAlbum(responseData)
@@ -42,11 +41,10 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
   } else if (deleteModeActive) {
     card.remove()
 
-    const [response, error] = await catchError(fetch(`http://localhost:3000/albums/${card.id}`, {
+    const response = await fetchRequest(fetch(`http://localhost:3000/albums/${card.id}`, {
       method: 'DELETE',
-    }))
-
-    if (error || !response.ok) return alert("Failed to delete your album: " + (error ? error.stack : response.status))
+    }), 'delete your album')
+    if (!response) return
   }  
 })
 
@@ -63,12 +61,11 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async (even
   const data = new FormData(form)
   const albumId = form.id.split('-')[1]
 
-  const [response, error] = await catchError(fetch(`http://localhost:3000/albums/${albumId}`, {
+  const response = await fetchRequest(fetch(`http://localhost:3000/albums/${albumId}`, {
     method: 'PATCH',
     body: data
-  }))
-
-  if (error || !response.ok) return alert("Failed to edit your album: " + (error ? error.stack : response.status))
+  }), 'edit your album')
+  if (!response) return
 
   editDialog.close()
   location.reload()
@@ -115,11 +112,10 @@ async function loadAlbums() {
 
   document.querySelector('.grid').innerHTML = ''
 
-  const [photosRes, photosErr] = await catchError(fetch('http://localhost:3000/photos', {
+  const photosRes = await fetchRequest(fetch('http://localhost:3000/photos', {
     method: 'GET',
-  }))
-
-  if (photosErr || !photosRes.ok) return alert("Failed to load photos: " + (photosErr ? photosErr.stack : photosRes.status))
+  }), 'load photos')
+  if (!photosRes) return
 
   const photosData = await photosRes.json()
   for (const id of Object.keys(photosByAlbumId)) delete photosByAlbumId[id]
@@ -129,11 +125,10 @@ async function loadAlbums() {
     photosByAlbumId[photo.album_id].push(photo)
   })
 
-  const [response, error] = await catchError(fetch(`http://localhost:3000/albums${query ? `?${query}` : ''}`, {
+  const response = await fetchRequest(fetch(`http://localhost:3000/albums${query ? `?${query}` : ''}`, {
     method: 'GET',
-  }))
-
-  if (error || !response.ok) return alert("Failed to load albums: " + (error ? error.stack : response.status))
+  }), 'load albums')
+  if (!response) return
 
   const responseData = await response.json()
   responseData.forEach(addAlbum)
