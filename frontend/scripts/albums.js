@@ -82,6 +82,7 @@ document.querySelector('.remove-btn').addEventListener('click', async (event) =>
 function addAlbum(albumData) {
   albumsById[albumData.id] = albumData
   const cardsGrid = document.querySelector(".grid")
+  
   cardsGrid.innerHTML += `
     <div class="card" id="${albumData.id}" style="background-color: ${albumData.color}">
       <div class="top-text-wrapper">
