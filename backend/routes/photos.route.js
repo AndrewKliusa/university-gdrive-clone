@@ -17,6 +17,14 @@ photoRoutes.get("/", (req, res, next) => {
 
 photoRoutes.post("/", upload.single("photo"), validate({ body: photoCreateBodySchema, file: photoCreateFileSchema }), (req, res, next) => {
   try {
+    const peopleIds = req.body.people
+
+    for (const personId of peopleIds) {
+      if (!Database.Persons.getPerson(personId)) {
+        return next({ status: 404, message: "Person with this id was not found" })
+      }
+    }
+
     const photoParams = { 
       album_id: req.body.album_id,
       caption: req.body.caption,
@@ -27,7 +35,8 @@ photoRoutes.post("/", upload.single("photo"), validate({ body: photoCreateBodySc
     }
 
     const photo = Database.Photos.addPhoto(photoParams)
-    res.status(201).json(photo)
+    Database.Photos.setPhotoPeople(photo.id, peopleIds)
+    res.status(201).json(Database.Photos.getPhoto(photo.id))
   } catch (err) {
     next(err)
   }
@@ -49,17 +58,33 @@ photoRoutes.patch("/:id", upload.single("photo"), validate({ params: photoIdSche
     const existingPhoto = Database.Photos.getPhoto(req.params.id)
     if (!existingPhoto) return next({ status: 404, message: "Photo with this id was not found" })
 
+    const peopleIds = req.body.people
+
+    if (peopleIds !== undefined) {
+      for (const personId of peopleIds) {
+        if (!Database.Persons.getPerson(personId)) {
+          return next({ status: 404, message: "Person with this id was not found" })
+        }
+      }
+    }
+
     const fileData = req.file
       ? { hash: req.file.filename, name: req.file.originalname, size_bytes: req.file.size }
       : {}
 
     const updateData = { ...req.body, ...fileData }
+    delete updateData.people
 
     if (updateData.caption === '') {
       delete updateData.caption
     }
 
     Database.Photos.updatePhoto(req.params.id, updateData)
+
+    if (peopleIds !== undefined) {
+      Database.Photos.setPhotoPeople(req.params.id, peopleIds)
+    }
+
     const photo = Database.Photos.getPhoto(req.params.id)
 
     res.status(200).json(photo)

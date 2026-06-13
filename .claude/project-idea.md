@@ -10,48 +10,6 @@ No authentication, no user accounts — this is a personal-use app, treated as a
 - **Person** — a person who can appear in photos (name, created_at).
 - **Photo** — uploaded image with metadata (hash filename on disk, original name, size_bytes, caption, taken_at, created_at). Optionally belongs to one album; tagged with many people via `photo_people`.
 
-Relationships:
-- One-to-many: **Album → Photos** (optional — `album_id` is nullable, photos may be "unalbumed").
-- Many-to-many: Photo ↔ People via `photo_people` join table. This is the rubric-relevant complexity.
-
-## Schema (DBML)
-
-```dbml
-Table album {
-  id integer [primary key]
-  name varchar [not null]
-  description varchar
-  created_at timestamp [default: `CURRENT_TIMESTAMP`]
-}
-
-Table person {
-  id integer [primary key]
-  name varchar [not null]
-  created_at timestamp [default: `CURRENT_TIMESTAMP`]
-}
-
-Table photo {
-  id integer [primary key]
-  album_id integer
-  hash varchar [not null]          // multer-generated filename on disk
-  name varchar [not null]          // original filename from upload
-  size_bytes integer [not null]
-  caption varchar
-  taken_at timestamp
-  created_at timestamp [default: `CURRENT_TIMESTAMP`]
-}
-
-Table photo_people {
-  photo_id integer [not null]
-  person_id integer [not null]
-  indexes { (photo_id, person_id) [pk] }
-}
-
-Ref: photo.album_id        > album.id   [delete: set null]   // photos survive album delete
-Ref: photo_people.photo_id  > photo.id  [delete: cascade]
-Ref: photo_people.person_id > person.id [delete: cascade]
-```
-
 ## Features per resource
 
 ### Albums (full CRUD)

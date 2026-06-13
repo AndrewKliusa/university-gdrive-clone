@@ -40,7 +40,7 @@ export class PhotoManager {
     const result = addQuery.run(normalizedParams)
 
     const photo = this.Database.prepare('SELECT * FROM photo WHERE id = ?').get(result.lastInsertRowid)
-    return { ...photo, created_at: normalizeDate(photo.created_at) }
+    return this.attachPeopleIds({ ...photo, created_at: normalizeDate(photo.created_at) })
   }
 
   /**
@@ -55,7 +55,12 @@ export class PhotoManager {
   getAllPhotos() {
     const getAllQuery = this.Database.prepare('SELECT * FROM photo ORDER BY created_at DESC')
     const results = getAllQuery.all()
-    return results.map(r => ({ ...r, created_at: normalizeDate(r.created_at) }))
+    const peopleMap = this.getAllPhotoPeopleMap()
+
+    return results.map(r => this.attachPeopleIds(
+      { ...r, created_at: normalizeDate(r.created_at) },
+      peopleMap[r.id] ?? []
+    ))
   }
 
   /**
@@ -66,7 +71,52 @@ export class PhotoManager {
     const getQuery = this.Database.prepare('SELECT * FROM photo WHERE id = @id')
     const result = getQuery.get({ id })
 
-    return result ? { ...result, created_at: normalizeDate(result.created_at) } : null
+    return result
+      ? this.attachPeopleIds({ ...result, created_at: normalizeDate(result.created_at) })
+      : null
+  }
+
+  /**
+   * @param {string} photoId
+   * @returns {number[]}
+   */
+  getPhotoPeople(photoId) {
+    const getQuery = this.Database.prepare('SELECT person_id FROM photo_people WHERE photo_id = @photo_id')
+    return getQuery.all({ photo_id: photoId }).map(row => row.person_id)
+  }
+
+  /**
+   * @param {string} photoId
+   * @param {number[]} personIds
+   */
+  setPhotoPeople(photoId, personIds) {
+    const removeQuery = this.Database.prepare('DELETE FROM photo_people WHERE photo_id = @photo_id')
+    removeQuery.run({ photo_id: photoId })
+
+    const insertQuery = this.Database.prepare(`
+      INSERT INTO photo_people (photo_id, person_id) VALUES (@photo_id, @person_id)
+    `)
+
+    for (const personId of personIds) {
+      insertQuery.run({ photo_id: photoId, person_id: personId })
+    }
+  }
+
+  getAllPhotoPeopleMap() {
+    const getAllQuery = this.Database.prepare('SELECT photo_id, person_id FROM photo_people')
+    const rows = getAllQuery.all()
+    const map = {}
+
+    for (const row of rows) {
+      if (!map[row.photo_id]) map[row.photo_id] = []
+      map[row.photo_id].push(row.person_id)
+    }
+
+    return map
+  }
+
+  attachPeopleIds(photo, peopleIds = this.getPhotoPeople(photo.id)) {
+    return { ...photo, people_ids: peopleIds }
   }
 
   /**

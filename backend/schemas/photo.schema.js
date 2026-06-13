@@ -5,10 +5,16 @@ const optionalId = z.preprocess(
   z.coerce.number().int().positive().nullish()
 )
 
+const peopleIds = z.preprocess(
+  (val) => val === '' || val == null ? [] : Array.isArray(val) ? val : [val],
+  z.array(z.coerce.number().int().positive()).default([])
+)
+
 export const photoCreateBodySchema = z.object({
   album_id: optionalId,
   caption: z.string().nullish(),
-  taken_at: z.string().nullish()
+  taken_at: z.string().nullish(),
+  people: peopleIds
 })
 
 export const photoCreateFileSchema = z.object({

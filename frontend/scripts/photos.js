@@ -3,6 +3,7 @@ let deleteModeActive = false;
 
 const photosById = {}
 const albumsById = {}
+const personsById = {}
 
 loadPhotos()
 
@@ -35,6 +36,10 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
     form.querySelector('[name="taken_at"]').value = photoData.taken_at ?? ''
     form.querySelector('[name="album_id"]').value = photoData.album_id ?? ''
     form.querySelector('[name="caption"]').value = photoData.caption ?? ''
+
+    const select = form.querySelector('[name="people"]')
+    const ids = photoData.people_ids ?? []
+    ;[...select.options].forEach(opt => { opt.selected = ids.includes(Number(opt.value)) })
 
     editDialog.showModal()
   } else if (deleteModeActive) {
@@ -87,6 +92,17 @@ function addPhoto(photoData) {
   const albumHtml = album
     ? `<span class="album-text" style="background-color: ${album.color ?? '#dbeafe'}">${album.name}</span>`
     : ''
+  const peopleHtml = (photoData.people_ids ?? [])
+    .map(id => {
+      const person = personsById[id]
+      if (!person) return 'resources/cat_cropped.png'
+      const avatar = person.avatar_id && photosById[person.avatar_id]
+      return avatar
+        ? `http://localhost:3000/uploads/${avatar.hash}`
+        : 'resources/cat_cropped.png'
+    })
+    .map(src => `<img class="person-image" src="${src}">`)
+    .join('')
   const cardsGrid = document.querySelector(".grid")
 
   cardsGrid.innerHTML += `
@@ -94,11 +110,7 @@ function addPhoto(photoData) {
       <div class="photo-top">
         <span class="date-text">${photoData.created_at}</span>
         <div class="people-images-wrapper">
-          <img class="person-image" src="resources/test_cropped.jpg">
-          <img class="person-image" src="resources/cat_cropped.png">
-          <img class="person-image" src="resources/cat_cropped.png">
-          <img class="person-image" src="resources/cat_cropped.png">
-          <img class="person-image" src="resources/cat_cropped.png">
+          ${peopleHtml}
         </div>
         ${albumHtml}
       </div>
@@ -118,12 +130,29 @@ async function loadPhotos() {
   const albumsData = await albumsRes.json()
   albumsData.forEach(album => { albumsById[album.id] = album })
 
-  const options = Object.values(albumsById)
+  const albumOptions = Object.values(albumsById)
     .map(album => `<option value="${album.id}">${album.name}</option>`)
     .join('')
 
   document.querySelectorAll('select[name="album_id"]').forEach(select => {
-    select.innerHTML = `<option value="">Choose an album…</option>${options}`
+    select.innerHTML = `<option value="">Choose an album…</option>${albumOptions}`
+  })
+
+  const [peopleRes, peopleErr] = await catchError(fetch('http://localhost:3000/people', {
+    method: 'GET',
+  }))
+
+  if (peopleErr || !peopleRes.ok) return alert("Failed to load people: " + (peopleErr ? peopleErr.stack : peopleRes.status))
+
+  const peopleData = await peopleRes.json()
+  peopleData.forEach(person => { personsById[person.id] = person })
+
+  const peopleOptions = Object.values(personsById)
+    .map(person => `<option value="${person.id}">${person.name}</option>`)
+    .join('')
+
+  document.querySelectorAll('select[name="people"]').forEach(select => {
+    select.innerHTML = peopleOptions
   })
 
   const [response, error] = await catchError(fetch('http://localhost:3000/photos', {
@@ -133,5 +162,6 @@ async function loadPhotos() {
   if (error || !response.ok) return alert("Failed to upload your photo: " + (error ? error.stack : response.status))
 
   const responseData = await response.json()
+  responseData.forEach(photo => { photosById[photo.id] = photo })
   responseData.forEach(addPhoto)
 }
