@@ -6,6 +6,16 @@ import { upload } from "../middleware/multer.js";
 
 export const photoRoutes = Router();
 
+function assertPeopleExist(peopleIds, next) {
+  for (const personId of peopleIds) {
+    if (!Database.Persons.getPerson(personId)) {
+      next({ status: 404, message: "Person with this id was not found" })
+      return false
+    }
+  }
+  return true
+}
+
 photoRoutes.get("/", validate({ query: photoListQuerySchema }), (req, res, next) => {
   try {
     const photos = Database.Photos.getAllPhotos(req.filters)
@@ -19,11 +29,7 @@ photoRoutes.post("/", upload.single("photo"), validate({ body: photoCreateBodySc
   try {
     const peopleIds = req.body.people
 
-    for (const personId of peopleIds) {
-      if (!Database.Persons.getPerson(personId)) {
-        return next({ status: 404, message: "Person with this id was not found" })
-      }
-    }
+    if (!assertPeopleExist(peopleIds, next)) return
 
     const photoParams = { 
       album_id: req.body.album_id,
@@ -60,13 +66,7 @@ photoRoutes.patch("/:id", upload.single("photo"), validate({ params: photoIdSche
 
     const peopleIds = req.body.people
 
-    if (peopleIds !== undefined) {
-      for (const personId of peopleIds) {
-        if (!Database.Persons.getPerson(personId)) {
-          return next({ status: 404, message: "Person with this id was not found" })
-        }
-      }
-    }
+    if (peopleIds !== undefined && !assertPeopleExist(peopleIds, next)) return
 
     const fileData = req.file
       ? { hash: req.file.filename, name: req.file.originalname, size_bytes: req.file.size }
@@ -79,7 +79,9 @@ photoRoutes.patch("/:id", upload.single("photo"), validate({ params: photoIdSche
       delete updateData.caption
     }
 
-    Database.Photos.updatePhoto(req.params.id, updateData)
+    if (Object.keys(updateData).length) {
+      Database.Photos.updatePhoto(req.params.id, updateData)
+    }
 
     if (peopleIds !== undefined) {
       Database.Photos.setPhotoPeople(req.params.id, peopleIds)

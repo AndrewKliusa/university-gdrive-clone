@@ -1,7 +1,3 @@
-.photo-container {
-  flex: 1;
-}
-
 .main-image {
   object-fit: cover;
   height: 7.5rem;
@@ -19,11 +15,6 @@
 
 .person-image:first-child {
   margin-left: 0;
-}
-
-.images-container {
-  display: flex;
-  flex-flow: row;
 }
 
 .people-images-wrapper {

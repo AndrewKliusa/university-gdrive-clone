@@ -1,19 +1,18 @@
-let editModeActive = false;
-let deleteModeActive = false;
-
 const photosById = {}
 const albumsById = {}
 const personsById = {}
+
+const getModes = setupEditDeleteModes()
 
 loadPhotos()
 
 document.querySelector('.filter-apply-btn').addEventListener('click', fetchPhotos)
 
-document.querySelector('.submit-btn.add').addEventListener('click', async (event) => {
+document.querySelector('.submit-btn.add').addEventListener('click', async () => {
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
 
-  const response = await fetchRequest(fetch('http://localhost:3000/photos', {
+  const response = await fetchRequest(fetch(`${apiUrl}/photos`, {
     method: 'POST',
     body: data
   }), 'upload your photo')
@@ -29,6 +28,8 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
   const card = event.target.closest('.card')
   if (!card) return
 
+  const { editModeActive, deleteModeActive } = getModes()
+
   if (editModeActive) {
     const form = editDialog.querySelector('.edit-form')
     form.id = "target-" + card.id
@@ -40,48 +41,36 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
 
     const select = form.querySelector('[name="people"]')
     const ids = photoData.people_ids ?? []
-    ;[...select.options].forEach(opt => { opt.selected = ids.includes(Number(opt.value)) })
+
+    for (const opt of select.options) {
+      opt.selected = ids.includes(Number(opt.value))
+    }
 
     editDialog.showModal()
   } else if (deleteModeActive) {
-    card.remove()
-
-    const response = await fetchRequest(fetch(`http://localhost:3000/photos/${card.id}`, {
+    const response = await fetchRequest(fetch(`${apiUrl}/photos/${card.id}`, {
       method: 'DELETE',
     }), 'delete your photo')
     if (!response) return
-  }  
+
+    card.remove()
+    delete photosById[card.id]
+  }
 })
 
-document.querySelector('.edit-btn').addEventListener('click', async (event) => {
-  editModeActive = !editModeActive
-  if (editModeActive) deleteModeActive = false
-
-  addClassToCardsIf(editModeActive, "edit-hover")
-  addClassToCardsIf(deleteModeActive, "remove-hover")
-})
-
-document.querySelector('.submit-btn.edit').addEventListener('click', async (event) => {
+document.querySelector('.submit-btn.edit').addEventListener('click', async () => {
   const form = document.querySelector('.edit-form')
   const data = new FormData(form)
   const photoId = form.id.split('-')[1]
 
-  const response = await fetchRequest(fetch(`http://localhost:3000/photos/${photoId}`, {
+  const response = await fetchRequest(fetch(`${apiUrl}/photos/${photoId}`, {
     method: 'PATCH',
     body: data
   }), 'edit your photo')
   if (!response) return
 
   editDialog.close()
-  location.reload()
-})
-
-document.querySelector('.remove-btn').addEventListener('click', async (event) => {
-  deleteModeActive = !deleteModeActive
-  if (deleteModeActive) editModeActive = false
-
-  addClassToCardsIf(editModeActive, "edit-hover")
-  addClassToCardsIf(deleteModeActive, "remove-hover")
+  await fetchPhotos()
 })
 
 function addPhoto(photoData) {
@@ -91,18 +80,12 @@ function addPhoto(photoData) {
   const albumHtml = album
     ? `<span class="album-text" style="background-color: ${album.color ?? '#dbeafe'}">${album.name}</span>`
     : ''
+    
   const peopleHtml = (photoData.people_ids ?? [])
-    .map(id => {
-      const person = personsById[id]
-      if (!person) return 'resources/cat_cropped.png'
-
-      const avatar = person.avatar_id && photosById[person.avatar_id]
-      return avatar
-        ? `http://localhost:3000/uploads/${avatar.hash}`
-        : 'resources/cat_cropped.png'
-    })
+    .map(id => getAvatarSrc(personsById[id], photosById))
     .map(src => `<img class="person-image" src="${src}">`)
     .join('')
+
   const [year, month, day] = (photoData.taken_at ?? '').split('-')
   const dateText = day ? `${day}.${month}.${year.slice(2)}` : photoData.created_at
   const cardsGrid = document.querySelector(".grid")
@@ -116,7 +99,7 @@ function addPhoto(photoData) {
         </div>
         ${albumHtml}
       </div>
-      <img class="main-image" src="http://localhost:3000/uploads/${photoData.hash}">
+      <img class="main-image" src="${uploadUrl(photoData.hash)}">
       <span class="card-caption">${photoData.caption}</span>
     </div>
   `
@@ -138,8 +121,9 @@ async function fetchPhotos() {
   const query = params.toString()
 
   document.querySelector('.grid').innerHTML = ''
+  for (const id of Object.keys(photosById)) delete photosById[id]
 
-  const response = await fetchRequest(fetch(`http://localhost:3000/photos${query ? `?${query}` : ''}`, {
+  const response = await fetchRequest(fetch(`${apiUrl}/photos${query ? `?${query}` : ''}`, {
     method: 'GET',
   }), 'load photos')
   if (!response) return
@@ -150,7 +134,7 @@ async function fetchPhotos() {
 }
 
 async function loadPhotos() {
-  const albumsRes = await fetchRequest(fetch('http://localhost:3000/albums', {
+  const albumsRes = await fetchRequest(fetch(`${apiUrl}/albums`, {
     method: 'GET',
   }), 'load albums')
   if (!albumsRes) return
@@ -168,7 +152,7 @@ async function loadPhotos() {
 
   document.querySelector('[name="filter_album_id"]').innerHTML = `<option value="">All albums</option>${albumOptions}`
 
-  const peopleRes = await fetchRequest(fetch('http://localhost:3000/people', {
+  const peopleRes = await fetchRequest(fetch(`${apiUrl}/people`, {
     method: 'GET',
   }), 'load people')
   if (!peopleRes) return

@@ -85,7 +85,6 @@ export class PersonManager {
    * @param {EditPersonData} data 
    */
   updatePerson(id, data) {
-    /** @type {string[]} Array that ensures only allowed fields can be passed into update function, to prevent SQL Injections.*/
     const allowedFields = [
       "name",
       "photo_id",
@@ -93,6 +92,7 @@ export class PersonManager {
     ]
 
     const fields = Object.keys(data).filter(field => allowedFields.includes(field))
+    if (!fields.length) return
 
     const fieldsToUpdate = fields.map(field => `${field} = @${field}`).join(', ')
     const updateQuery = this.Database.prepare(`UPDATE person SET ${fieldsToUpdate} WHERE id = @id`)

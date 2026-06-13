@@ -102,19 +102,6 @@ export class PhotoManager {
       : null
   }
 
-  /**
-   * @param {string} photoId
-   * @returns {number[]}
-   */
-  getPhotoPeople(photoId) {
-    const getQuery = this.Database.prepare('SELECT person_id FROM photo_people WHERE photo_id = @photo_id')
-    return getQuery.all({ photo_id: photoId }).map(row => row.person_id)
-  }
-
-  /**
-   * @param {string} photoId
-   * @param {number[]} personIds
-   */
   setPhotoPeople(photoId, personIds) {
     const removeQuery = this.Database.prepare('DELETE FROM photo_people WHERE photo_id = @photo_id')
     removeQuery.run({ photo_id: photoId })
@@ -141,7 +128,11 @@ export class PhotoManager {
     return map
   }
 
-  attachPeopleIds(photo, peopleIds = this.getPhotoPeople(photo.id)) {
+  attachPeopleIds(photo, peopleIds) {
+    if (peopleIds === undefined) {
+      const getQuery = this.Database.prepare('SELECT person_id FROM photo_people WHERE photo_id = @photo_id')
+      peopleIds = getQuery.all({ photo_id: photo.id }).map(row => row.person_id)
+    }
     return { ...photo, people_ids: peopleIds }
   }
 
@@ -160,7 +151,6 @@ export class PhotoManager {
    * @param {EditPhotoData} data 
    */
   updatePhoto(id, data) {
-    /** @type {string[]} Array that ensures only allowed fields can be passed into update function, to prevent SQL Injections.*/
     const allowedFields = [
       "album_id",
       "name",
@@ -171,6 +161,7 @@ export class PhotoManager {
     ]
 
     const fields = Object.keys(data).filter(field => allowedFields.includes(field))
+    if (!fields.length) return
 
     const fieldsToUpdate = fields.map(field => `${field} = @${field}`).join(', ')
     const updateQuery = this.Database.prepare(`UPDATE photo SET ${fieldsToUpdate} WHERE id = @id`)

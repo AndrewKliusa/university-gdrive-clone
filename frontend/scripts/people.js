@@ -3,17 +3,17 @@ const photosById = {}
 
 loadPeople()
 
-document.querySelector('.filter-apply-btn').addEventListener('click', () => loadPeople())
+document.querySelector('.filter-apply-btn').addEventListener('click', loadPeople)
 
 document.querySelector('.add-person-btn').addEventListener('click', () => {
   addDialog.showModal()
 })
 
-document.querySelector('.submit-btn.add').addEventListener('click', async (event) => {
+document.querySelector('.submit-btn.add').addEventListener('click', async () => {
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
 
-  const response = await fetchRequest(fetch('http://localhost:3000/people', {
+  const response = await fetchRequest(fetch(`${apiUrl}/people`, {
     method: 'POST',
     body: data
   }), 'add your person')
@@ -40,36 +40,34 @@ document.querySelector('.people-grid').addEventListener('click', async (event) =
 
     editDialog.showModal()
   } else if (event.target.closest('.delete-overlay')) {
-    wrapper.remove()
-
-    const response = await fetchRequest(fetch(`http://localhost:3000/people/${wrapper.id}`, {
+    const response = await fetchRequest(fetch(`${apiUrl}/people/${wrapper.id}`, {
       method: 'DELETE',
     }), 'delete your person')
     if (!response) return
+
+    wrapper.remove()
+    delete personsById[wrapper.id]
   }
 })
 
-document.querySelector('.submit-btn.edit').addEventListener('click', async (event) => {
+document.querySelector('.submit-btn.edit').addEventListener('click', async () => {
   const form = document.querySelector('.edit-form')
   const data = new FormData(form)
   const personId = form.id.split('-')[1]
 
-  const response = await fetchRequest(fetch(`http://localhost:3000/people/${personId}`, {
+  const response = await fetchRequest(fetch(`${apiUrl}/people/${personId}`, {
     method: 'PATCH',
     body: data
   }), 'edit your person')
   if (!response) return
 
   editDialog.close()
-  location.reload()
+  await loadPeople()
 })
 
 function addPerson(personData) {
   personsById[personData.id] = personData
-  const avatar = personData.avatar_id && photosById[personData.avatar_id]
-  const avatarSrc = avatar
-    ? `http://localhost:3000/uploads/${avatar.hash}`
-    : 'resources/cat_cropped.png'
+  const avatarSrc = getAvatarSrc(personData, photosById)
   const addBtn = document.querySelector('.add-person-btn')
 
   addBtn.insertAdjacentHTML('beforebegin', `
@@ -88,7 +86,7 @@ function addPerson(personData) {
 
 async function loadPeople() {
   if (!Object.keys(photosById).length) {
-    const photosRes = await fetchRequest(fetch('http://localhost:3000/photos', {
+    const photosRes = await fetchRequest(fetch(`${apiUrl}/photos`, {
       method: 'GET',
     }), 'load photos')
     if (!photosRes) return
@@ -111,8 +109,9 @@ async function loadPeople() {
   const query = params.toString()
 
   document.querySelectorAll('.avatar-name-wrapper').forEach(el => el.remove())
+  for (const id of Object.keys(personsById)) delete personsById[id]
 
-  const response = await fetchRequest(fetch(`http://localhost:3000/people${query ? `?${query}` : ''}`, {
+  const response = await fetchRequest(fetch(`${apiUrl}/people${query ? `?${query}` : ''}`, {
     method: 'GET',
   }), 'load your people')
   if (!response) return

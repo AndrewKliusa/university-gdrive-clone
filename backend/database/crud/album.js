@@ -25,7 +25,6 @@ export class AlbumManager {
     const normalizedParams = {
       name: params.name,
       color: params.color,
-      photo_id: params.photo_id,
       description: params.description
     }
 
@@ -88,7 +87,6 @@ export class AlbumManager {
    * @param {EditAlbumData} data 
    */
   updateAlbum(id, data) {
-    /** @type {string[]} Array that ensures only allowed fields can be passed into update function, to prevent SQL Injections.*/
     const allowedFields = [
       "name",
       "color",
@@ -97,6 +95,7 @@ export class AlbumManager {
     ]
 
     const fields = Object.keys(data).filter(field => allowedFields.includes(field))
+    if (!fields.length) return
 
     const fieldsToUpdate = fields.map(field => `${field} = @${field}`).join(', ')
     const updateQuery = this.Database.prepare(`UPDATE album SET ${fieldsToUpdate} WHERE id = @id`)

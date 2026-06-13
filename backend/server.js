@@ -1,4 +1,4 @@
-import express, { json, urlencoded } from 'express';
+import express from 'express';
 import { photoRoutes } from './routes/photos.route.js';
 import { albumRoutes } from './routes/albums.route.js';
 import { personRoutes } from './routes/people.route.js';
@@ -18,7 +18,7 @@ app.use("/albums", albumRoutes)
 app.use("/people", personRoutes)
 app.use(errorHandler)
 
-function startServer() {
+if (!process.env.TEST_ENV) {
   const server = app.listen(3000, () => {
     console.log(`Server running on port ${3000}`);
   });
@@ -27,5 +27,3 @@ function startServer() {
     console.error('Server error:', error);
   });
 }
-
-if (!process.env.TEST_ENV) startServer()
