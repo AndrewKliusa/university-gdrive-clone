@@ -9,7 +9,7 @@
   </head>
   <body>
     <script src="scripts/shared.js" defer></script>
-    <script src="scripts/photo.js" defer></script>
+    <script src="scripts/photos.js" defer></script>
     <nav class="navigation">
         <span class="navigation-span">Photo Drive</span>
         <div class="nav-links">
@@ -55,9 +55,41 @@
         <textarea name="caption" rows="3" placeholder="Add a description…"></textarea>
       </form>
       <div class="form-actions">
-        <button type="button" class="submit-btn">Add photo</button>
-        <button type="button" class="close-btn">Cancel</button>
+        <button type="button" class="submit-btn add">Add photo</button>
+        <button type="button" class="close-btn add">Cancel</button>
       </div>
+    </dialog>
+    <dialog class="edit-dialog">
+      <form class="edit-form" id="target-">
+        <span class="edit-text">Edit photo</span>
+        <input type="file" name="photo" accept="image/*" required>
+
+        <span class="input-label">Photo date</span>
+        <input type="date" name="taken_at" required>
+
+        <span class="input-label">Select an album</span>
+        <select name="album" required>
+          <option value="">Choose an album…</option>
+          <option value="1">Wedding</option>
+          <option value="2">Honeymoon</option>
+        </select>
+
+        <span class="input-label">Add people (Optional)</span>
+        <select name="people" multiple size="4">
+          <option value="1">Mother</option>
+          <option value="2">Sister</option>
+          <option value="3">Dad</option>
+          <option value="4">Friend</option>
+          <option value="5">Cousin</option>
+        </select>
+
+        <span class="input-label">Add description (Optional)</span>
+        <textarea name="caption" rows="3" placeholder="Add a description…"></textarea>
+        <div class="form-actions">
+          <button type="button" class="submit-btn edit">Add photo</button>
+          <button type="button" class="close-btn edit">Cancel</button>
+        </div>
+      </form>
     </dialog>
   </body>
 </html>

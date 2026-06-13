@@ -44,12 +44,22 @@ photoRoutes.get("/:id", validate({ params: photoIdSchema }), (req, res, next) =>
   }
 });
 
-photoRoutes.patch("/:id", validate({ params: photoIdSchema, body: patchPhotoBodySchema }), (req, res, next) => {
+photoRoutes.patch("/:id", upload.single("photo"), validate({ params: photoIdSchema, body: patchPhotoBodySchema }), (req, res, next) => {
   try {
     const existingPhoto = Database.Photos.getPhoto(req.params.id)
     if (!existingPhoto) return next({ status: 404, message: "Photo with this id was not found" })
 
-    Database.Photos.updatePhoto(req.params.id, req.body)
+    const fileData = req.file
+      ? { hash: req.file.filename, name: req.file.originalname, size_bytes: req.file.size }
+      : {}
+
+    const updateData = { ...req.body, ...fileData }
+
+    if (updateData.caption === '') {
+      delete updateData.caption
+    }
+
+    Database.Photos.updatePhoto(req.params.id, updateData)
     const photo = Database.Photos.getPhoto(req.params.id)
 
     res.status(200).json(photo)

@@ -9,7 +9,7 @@ export const photoCreateBodySchema = z.object({
 export const photoCreateFileSchema = z.object({
   originalname: z.string().min(1).max(255),
   filename: z.string().min(1).max(255),
-  size: z.number().int().nonnegative()
+  size: z.number().int().positive()
 })
 
 export const photoIdSchema = z.object({ id: z.string() })
