@@ -29,12 +29,21 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
   if (editModeActive) {
     const form = editDialog.querySelector('.edit-form')
     form.id = "target-" + card.id
-    
-    fillEditForm(form, albumsById[card.id])
+
+    const albumData = albumsById[card.id]
+    form.querySelector('[name="name"]').value = albumData.name ?? ''
+    form.querySelector('[name="color"]').value = albumData.color ?? '#dbeafe'
+    form.querySelector('[name="description"]').value = albumData.description ?? ''
+
     editDialog.showModal()
   } else if (deleteModeActive) {
     card.remove()
-    await removeAlbum(card.id)
+
+    const [response, error] = await catchError(fetch(`http://localhost:3000/albums/${card.id}`, {
+      method: 'DELETE',
+    }))
+
+    if (error || !response.ok) return alert("Failed to delete your album: " + (error ? error.stack : response.status))
   }  
 })
 
@@ -58,8 +67,6 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async (even
 
   if (error || !response.ok) return alert("Failed to edit your album: " + (error ? error.stack : response.status))
 
-  const responseData = await response.json()
-
   editDialog.close()
   location.reload()
 })
@@ -71,12 +78,6 @@ document.querySelector('.remove-btn').addEventListener('click', async (event) =>
   addClassToCardsIf(editModeActive, "edit-hover")
   addClassToCardsIf(deleteModeActive, "remove-hover")
 })
-
-function fillEditForm(form, albumData) {
-  form.querySelector('[name="name"]').value = albumData.name ?? ''
-  form.querySelector('[name="color"]').value = albumData.color ?? '#dbeafe'
-  form.querySelector('[name="description"]').value = albumData.description ?? ''
-}
 
 function addAlbum(albumData) {
   albumsById[albumData.id] = albumData
@@ -106,12 +107,4 @@ async function loadAlbums() {
 
   const responseData = await response.json()
   responseData.forEach(addAlbum)
-}
-
-async function removeAlbum(cardId) {
-  const [response, error] = await catchError(fetch(`http://localhost:3000/albums/${cardId}`, {
-    method: 'DELETE',
-  }))
-
-  if (error || !response.ok) return alert("Failed to delete your album: " + (error ? error.stack : response.status))
 }

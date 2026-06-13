@@ -2,6 +2,7 @@ let editModeActive = false;
 let deleteModeActive = false;
 
 const photosById = {}
+const albumsById = {}
 
 loadPhotos()
 
@@ -30,11 +31,20 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
     const form = editDialog.querySelector('.edit-form')
     form.id = "target-" + card.id
 
-    fillEditForm(form, photosById[card.id])
+    const photoData = photosById[card.id]
+    form.querySelector('[name="taken_at"]').value = photoData.taken_at ?? ''
+    form.querySelector('[name="album_id"]').value = photoData.album_id ?? ''
+    form.querySelector('[name="caption"]').value = photoData.caption ?? ''
+
     editDialog.showModal()
   } else if (deleteModeActive) {
     card.remove()
-    await removePhoto(card.id)
+
+    const [response, error] = await catchError(fetch(`http://localhost:3000/photos/${card.id}`, {
+      method: 'DELETE',
+    }))
+
+    if (error || !response.ok) return alert("Failed to delete your photo: " + (error ? error.stack : response.status))
   }  
 })
 
@@ -58,8 +68,6 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async (even
 
   if (error || !response.ok) return alert("Failed to edit your photo: " + (error ? error.stack : response.status))
 
-  const responseData = await response.json()
-
   editDialog.close()
   location.reload()
 })
@@ -72,15 +80,15 @@ document.querySelector('.remove-btn').addEventListener('click', async (event) =>
   addClassToCardsIf(deleteModeActive, "remove-hover")
 })
 
-function fillEditForm(form, photoData) {
-  form.querySelector('[name="taken_at"]').value = photoData.taken_at ?? ''
-  form.querySelector('[name="album"]').value = photoData.album_id ?? ''
-  form.querySelector('[name="caption"]').value = photoData.caption ?? ''
-}
-
 function addPhoto(photoData) {
   photosById[photoData.id] = photoData
+
+  const album = photoData.album_id && albumsById[photoData.album_id]
+  const albumHtml = album
+    ? `<span class="album-text" style="background-color: ${album.color ?? '#dbeafe'}">${album.name}</span>`
+    : ''
   const cardsGrid = document.querySelector(".grid")
+
   cardsGrid.innerHTML += `
     <div class="card photo-hover" id="${photoData.id}">
       <div class="photo-top">
@@ -92,7 +100,7 @@ function addPhoto(photoData) {
           <img class="person-image" src="resources/cat_cropped.png">
           <img class="person-image" src="resources/cat_cropped.png">
         </div>
-        <span class="album-text">My Home</span>
+        ${albumHtml}
       </div>
       <img class="main-image" src="http://localhost:3000/uploads/${photoData.hash}">
       <span class="card-caption">${photoData.caption}</span>
@@ -101,6 +109,23 @@ function addPhoto(photoData) {
 }
 
 async function loadPhotos() {
+  const [albumsRes, albumsErr] = await catchError(fetch('http://localhost:3000/albums', {
+    method: 'GET',
+  }))
+
+  if (albumsErr || !albumsRes.ok) return alert("Failed to load albums: " + (albumsErr ? albumsErr.stack : albumsRes.status))
+
+  const albumsData = await albumsRes.json()
+  albumsData.forEach(album => { albumsById[album.id] = album })
+
+  const options = Object.values(albumsById)
+    .map(album => `<option value="${album.id}">${album.name}</option>`)
+    .join('')
+
+  document.querySelectorAll('select[name="album_id"]').forEach(select => {
+    select.innerHTML = `<option value="">Choose an album…</option>${options}`
+  })
+
   const [response, error] = await catchError(fetch('http://localhost:3000/photos', {
     method: 'GET',
   }))
@@ -109,12 +134,4 @@ async function loadPhotos() {
 
   const responseData = await response.json()
   responseData.forEach(addPhoto)
-}
-
-async function removePhoto(cardId) {
-  const [response, error] = await catchError(fetch(`http://localhost:3000/photos/${cardId}`, {
-    method: 'DELETE',
-  }))
-
-  if (error || !response.ok) return alert("Failed to delete your photo: " + (error ? error.stack : response.status))
 }
