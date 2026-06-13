@@ -2,8 +2,11 @@ let editModeActive = false;
 let deleteModeActive = false;
 
 const albumsById = {}
+const photosByAlbumId = {}
 
 loadAlbums()
+
+document.querySelector('.filter-apply-btn').addEventListener('click', () => loadAlbums())
 
 document.querySelector('.submit-btn.add').addEventListener('click', async (event) => {
   const form = document.querySelector('.add-form')
@@ -81,30 +84,56 @@ document.querySelector('.remove-btn').addEventListener('click', async (event) =>
 
 function addAlbum(albumData) {
   albumsById[albumData.id] = albumData
+
+  const albumPhotos = photosByAlbumId[albumData.id] ?? []
+  const picked = albumPhotos.slice().sort(() => Math.random() - 0.5).slice(0, 3)
+  const srcs = picked.map(photo => `http://localhost:3000/uploads/${photo.hash}`)
+  while (srcs.length < 3) srcs.push('resources/cat_cropped.png')
+
+  const imagesHtml = srcs.map(src => `<img class="album-image" src="${src}">`).join('')
   const cardsGrid = document.querySelector(".grid")
-  
+
   cardsGrid.innerHTML += `
     <div class="card" id="${albumData.id}" style="background-color: ${albumData.color}">
       <div class="top-text-wrapper">
-        <span class="date-text">3 photos</span>
+        <span class="date-text">${albumPhotos.length} photos</span>
         <span class="album-text">${albumData.name}</span>
         <span class="date-text">10MB size</span>
       </div> 
       <div class="album-images-wrapper">
-        <img class="album-image" src="resources/test_cropped.jpg">
-        <img class="album-image" src="resources/cat_cropped.png">
-        <img class="album-image" src="resources/cat_cropped.png">
+        ${imagesHtml}
       </div>
     </div>
   `
 }
 
 async function loadAlbums() {
-  const [response, error] = await catchError(fetch('http://localhost:3000/albums', {
+  const search = document.querySelector('[name="filter_search"]').value.trim()
+  const params = new URLSearchParams()
+  if (search) params.set('search', search)
+  const query = params.toString()
+
+  document.querySelector('.grid').innerHTML = ''
+
+  const [photosRes, photosErr] = await catchError(fetch('http://localhost:3000/photos', {
     method: 'GET',
   }))
 
-  if (error || !response.ok) return alert("Failed to upload your album: " + (error ? error.stack : response.status))
+  if (photosErr || !photosRes.ok) return alert("Failed to load photos: " + (photosErr ? photosErr.stack : photosRes.status))
+
+  const photosData = await photosRes.json()
+  for (const id of Object.keys(photosByAlbumId)) delete photosByAlbumId[id]
+  photosData.forEach(photo => {
+    if (!photo.album_id) return
+    if (!photosByAlbumId[photo.album_id]) photosByAlbumId[photo.album_id] = []
+    photosByAlbumId[photo.album_id].push(photo)
+  })
+
+  const [response, error] = await catchError(fetch(`http://localhost:3000/albums${query ? `?${query}` : ''}`, {
+    method: 'GET',
+  }))
+
+  if (error || !response.ok) return alert("Failed to load albums: " + (error ? error.stack : response.status))
 
   const responseData = await response.json()
   responseData.forEach(addAlbum)

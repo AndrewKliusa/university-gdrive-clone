@@ -11,3 +11,12 @@ export const personCreateBodySchema = z.object({
 export const personIdSchema = z.object({ id: z.string() })
 
 export const patchPersonBodySchema = personCreateBodySchema.partial()
+
+const optionalSearch = z.preprocess(
+  (val) => val === '' || val == null ? undefined : val,
+  z.string().trim().min(1).optional()
+)
+
+export const personListQuerySchema = z.object({
+  search: optionalSearch
+})

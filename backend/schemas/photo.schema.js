@@ -32,3 +32,15 @@ export const photoSchema = z.union(photoCreateBodySchema, photoIdSchema, z.objec
 }))
 
 export const patchPhotoBodySchema = photoCreateBodySchema.partial()
+
+const optionalDate = z.preprocess(
+  (val) => val === '' || val == null ? undefined : val,
+  z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()
+)
+
+export const photoListQuerySchema = z.object({
+  album_id: optionalId,
+  person_id: optionalId,
+  from: optionalDate,
+  to: optionalDate
+})

@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { Database } from "../database/database.js";
-import { personCreateBodySchema, personIdSchema, patchPersonBodySchema } from "../schemas/person.schema.js";
+import { personCreateBodySchema, personIdSchema, patchPersonBodySchema, personListQuerySchema } from "../schemas/person.schema.js";
 import { validate } from "../middleware/zod.js";
 import { upload } from "../middleware/multer.js";
 
 export const personRoutes = Router();
 
-personRoutes.get("/", (req, res, next) => {
+personRoutes.get("/", validate({ query: personListQuerySchema }), (req, res, next) => {
   try {
-    const persons = Database.Persons.getAllPersons()
+    const persons = Database.Persons.getAllPersons(req.filters)
     res.status(200).json(persons)
   } catch (err) {
     next(err)

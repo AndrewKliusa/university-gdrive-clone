@@ -7,6 +7,8 @@ const personsById = {}
 
 loadPhotos()
 
+document.querySelector('.filter-apply-btn').addEventListener('click', fetchPhotos)
+
 document.querySelector('.submit-btn.add').addEventListener('click', async (event) => {
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
@@ -96,6 +98,7 @@ function addPhoto(photoData) {
     .map(id => {
       const person = personsById[id]
       if (!person) return 'resources/cat_cropped.png'
+
       const avatar = person.avatar_id && photosById[person.avatar_id]
       return avatar
         ? `http://localhost:3000/uploads/${avatar.hash}`
@@ -103,12 +106,14 @@ function addPhoto(photoData) {
     })
     .map(src => `<img class="person-image" src="${src}">`)
     .join('')
+  const [year, month, day] = (photoData.taken_at ?? '').split('-')
+  const dateText = day ? `${day}.${month}.${year.slice(2)}` : photoData.created_at
   const cardsGrid = document.querySelector(".grid")
 
   cardsGrid.innerHTML += `
     <div class="card photo-hover" id="${photoData.id}">
       <div class="photo-top">
-        <span class="date-text">${photoData.created_at}</span>
+        <span class="date-text">${dateText}</span>
         <div class="people-images-wrapper">
           ${peopleHtml}
         </div>
@@ -118,6 +123,34 @@ function addPhoto(photoData) {
       <span class="card-caption">${photoData.caption}</span>
     </div>
   `
+}
+
+async function fetchPhotos() {
+  const bar = document.querySelector('.filter-bar')
+  const params = new URLSearchParams()
+  const albumId = bar.querySelector('[name="filter_album_id"]').value
+  const personId = bar.querySelector('[name="filter_person_id"]').value
+  const from = bar.querySelector('[name="filter_from"]').value
+  const to = bar.querySelector('[name="filter_to"]').value
+
+  if (albumId) params.set('album_id', albumId)
+  if (personId) params.set('person_id', personId)
+  if (from) params.set('from', from)
+  if (to) params.set('to', to)
+
+  const query = params.toString()
+
+  document.querySelector('.grid').innerHTML = ''
+
+  const [response, error] = await catchError(fetch(`http://localhost:3000/photos${query ? `?${query}` : ''}`, {
+    method: 'GET',
+  }))
+
+  if (error || !response.ok) return alert("Failed to load photos: " + (error ? error.stack : response.status))
+
+  const responseData = await response.json()
+  responseData.forEach(photo => { photosById[photo.id] = photo })
+  responseData.forEach(addPhoto)
 }
 
 async function loadPhotos() {
@@ -138,6 +171,8 @@ async function loadPhotos() {
     select.innerHTML = `<option value="">Choose an album…</option>${albumOptions}`
   })
 
+  document.querySelector('[name="filter_album_id"]').innerHTML = `<option value="">All albums</option>${albumOptions}`
+
   const [peopleRes, peopleErr] = await catchError(fetch('http://localhost:3000/people', {
     method: 'GET',
   }))
@@ -155,13 +190,7 @@ async function loadPhotos() {
     select.innerHTML = peopleOptions
   })
 
-  const [response, error] = await catchError(fetch('http://localhost:3000/photos', {
-    method: 'GET',
-  }))
+  document.querySelector('[name="filter_person_id"]').innerHTML = `<option value="">All people</option>${peopleOptions}`
 
-  if (error || !response.ok) return alert("Failed to upload your photo: " + (error ? error.stack : response.status))
-
-  const responseData = await response.json()
-  responseData.forEach(photo => { photosById[photo.id] = photo })
-  responseData.forEach(addPhoto)
+  await fetchPhotos()
 }

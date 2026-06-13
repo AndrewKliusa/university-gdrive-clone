@@ -75,4 +75,17 @@ describe('Person routes', () => {
     expect(res.status).toBe(200)
     expect(res.body).toHaveLength(2)
   })
+
+  it("Filters people by name search", async () => {
+    const photo = Database.Photos.addPhoto(dummyPhoto)
+    const avatar = Database.Photos.addPhoto(dummyPhotoTwo)
+
+    await addPerson(personWithPhotos("Alice Smith", photo.id, avatar.id))
+    await addPerson(personWithPhotos("Bob Jones", photo.id, avatar.id))
+
+    const res = await request(app).get('/people?search=Alice')
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+    expect(res.body[0].name).toBe("Alice Smith")
+  })
 })

@@ -61,4 +61,14 @@ describe('Album routes', () => {
     expect(res.status).toBe(200)
     expect(res.body).toHaveLength(2)
   })
+
+  it("Filters albums by name search", async () => {
+    await addAlbum({ name: "Summer trip", color: "#ff0000", description: "" })
+    await addAlbum({ name: "Winter ski", color: "#00ff00", description: "" })
+
+    const res = await request(app).get('/albums?search=Summer')
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+    expect(res.body[0].name).toBe("Summer trip")
+  })
 })

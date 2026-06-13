@@ -1,14 +1,14 @@
 import { Router } from "express";
-import { photoCreateBodySchema, photoCreateFileSchema, photoIdSchema, patchPhotoBodySchema } from "../schemas/photo.schema.js";
+import { photoCreateBodySchema, photoCreateFileSchema, photoIdSchema, patchPhotoBodySchema, photoListQuerySchema } from "../schemas/photo.schema.js";
 import { validate } from "../middleware/zod.js";
 import { Database } from "../database/database.js";
 import { upload } from "../middleware/multer.js";
 
 export const photoRoutes = Router();
 
-photoRoutes.get("/", (req, res, next) => {
+photoRoutes.get("/", validate({ query: photoListQuerySchema }), (req, res, next) => {
   try {
-    const photos = Database.Photos.getAllPhotos()
+    const photos = Database.Photos.getAllPhotos(req.filters)
     res.status(200).json(photos)
   } catch (err) {
     next(err)

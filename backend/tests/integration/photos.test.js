@@ -110,4 +110,39 @@ describe('Photo routes', () => {
 
     expect(postRes.status).toBe(404)
   })
+
+  it("Filters photos by album_id", async () => {
+    const album = Database.Albums.addAlbum({ name: "Summer", color: "#ff0000", description: "" })
+    Database.Photos.addPhoto({ ...dummyPhoto, album_id: album.id, taken_at: "2024-06-01" })
+    Database.Photos.addPhoto({ ...dummyPhotoTwo, taken_at: "2024-07-01" })
+
+    const res = await request(app).get(`/photos?album_id=${album.id}`)
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+    expect(res.body[0].album_id).toBe(album.id)
+  })
+
+  it("Filters photos by person_id via photo_people", async () => {
+    const avatar = Database.Photos.addPhoto(dummyPhotoTwo)
+    const linked = Database.Photos.addPhoto({ ...dummyPhoto, taken_at: "2024-06-01" })
+    const other = Database.Photos.addPhoto({ ...dummyPhotoTwo, name: "other", hash: "456", taken_at: "2024-07-01" })
+    const person = Database.Persons.addPerson({ name: "Alice", photo_id: linked.id, avatar_id: avatar.id })
+    Database.Photos.setPhotoPeople(linked.id, [person.id])
+
+    const res = await request(app).get(`/photos?person_id=${person.id}`)
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+    expect(res.body[0].id).toBe(linked.id)
+    expect(res.body[0].people_ids).toContain(person.id)
+  })
+
+  it("Filters photos by taken_at date range", async () => {
+    Database.Photos.addPhoto({ ...dummyPhoto, taken_at: "2024-01-15" })
+    Database.Photos.addPhoto({ ...dummyPhotoTwo, taken_at: "2024-06-15" })
+
+    const res = await request(app).get('/photos?from=2024-06-01&to=2024-12-31')
+    expect(res.status).toBe(200)
+    expect(res.body).toHaveLength(1)
+    expect(res.body[0].taken_at).toBe("2024-06-15")
+  })
 })

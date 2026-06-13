@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { Database } from "../database/database.js";
-import { albumCreateBodySchema, albumIdSchema, patchAlbumBodySchema } from "../schemas/album.schema.js";
+import { albumCreateBodySchema, albumIdSchema, patchAlbumBodySchema, albumListQuerySchema } from "../schemas/album.schema.js";
 import { validate } from "../middleware/zod.js";
 import { upload } from "../middleware/multer.js";
 
 export const albumRoutes = Router();
 
-albumRoutes.get("/", (req, res, next) => {
+albumRoutes.get("/", validate({ query: albumListQuerySchema }), (req, res, next) => {
   try {
-    const albums = Database.Albums.getAllAlbums()
+    const albums = Database.Albums.getAllAlbums(req.filters)
     res.status(200).json(albums)
   } catch (err) {
     next(err)

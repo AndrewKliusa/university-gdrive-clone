@@ -39,6 +39,7 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   padding: 10px;
+  padding-bottom: 3.5rem;
   align-items: start;
   background-color: rgb(0, 136, 255);
   margin: 0.3rem;
@@ -162,4 +163,41 @@ body {
   border: 1px solid;
   border-radius: 15px;
   background-color: rgb(75, 239, 75)
+}
+
+.filter-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 10px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: #dbeafe;
+  border: 1px solid;
+  border-radius: 15px;
+  padding: 0.4rem 0.6rem;
+  z-index: 1;
+  font-size: 0.75rem;
+}
+
+.filter-bar select,
+.filter-bar input[type="date"],
+.filter-bar input[type="text"] {
+  font-size: 0.75rem;
+  height: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.filter-apply-btn {
+  border: 1px solid;
+  border-radius: 10px;
+  background-color: rgb(139, 223, 246);
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
 }

@@ -3,6 +3,8 @@ const photosById = {}
 
 loadPeople()
 
+document.querySelector('.filter-apply-btn').addEventListener('click', () => loadPeople())
+
 document.querySelector('.add-person-btn').addEventListener('click', () => {
   addDialog.showModal()
 })
@@ -88,24 +90,33 @@ function addPerson(personData) {
 }
 
 async function loadPeople() {
-  const [photosRes, photosErr] = await catchError(fetch('http://localhost:3000/photos', {
-    method: 'GET',
-  }))
+  if (!Object.keys(photosById).length) {
+    const [photosRes, photosErr] = await catchError(fetch('http://localhost:3000/photos', {
+      method: 'GET',
+    }))
 
-  if (photosErr || !photosRes.ok) return alert("Failed to load photos: " + (photosErr ? photosErr.stack : photosRes.status))
+    if (photosErr || !photosRes.ok) return alert("Failed to load photos: " + (photosErr ? photosErr.stack : photosRes.status))
 
-  const photosData = await photosRes.json()
-  photosData.forEach(photo => { photosById[photo.id] = photo })
+    const photosData = await photosRes.json()
+    photosData.forEach(photo => { photosById[photo.id] = photo })
 
-  const options = Object.values(photosById)
-    .map(photo => `<option value="${photo.id}">${photo.name}</option>`)
-    .join('')
+    const options = Object.values(photosById)
+      .map(photo => `<option value="${photo.id}">${photo.name}</option>`)
+      .join('')
 
-  document.querySelectorAll('select[name="photo_id"], select[name="avatar_id"]').forEach(select => {
-    select.innerHTML = `<option value="">Choose a photo…</option>${options}`
-  })
+    document.querySelectorAll('select[name="photo_id"], select[name="avatar_id"]').forEach(select => {
+      select.innerHTML = `<option value="">Choose a photo…</option>${options}`
+    })
+  }
 
-  const [response, error] = await catchError(fetch('http://localhost:3000/people', {
+  const search = document.querySelector('[name="filter_search"]').value.trim()
+  const params = new URLSearchParams()
+  if (search) params.set('search', search)
+  const query = params.toString()
+
+  document.querySelectorAll('.avatar-name-wrapper').forEach(el => el.remove())
+
+  const [response, error] = await catchError(fetch(`http://localhost:3000/people${query ? `?${query}` : ''}`, {
     method: 'GET',
   }))
 
