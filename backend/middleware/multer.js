@@ -4,7 +4,7 @@ import crypto from "node:crypto";
 
 const storage = multer.diskStorage({
   destination: join(process.cwd(), "backend", "uploads"),
-  filename: (req, file, callback) => {
+  filename: (_, file, callback) => {
     const id = crypto.randomUUID();
     callback(null, id + extname(file.originalname));
   }

@@ -19,18 +19,6 @@
         </div>
     </nav>
     <div class="grid">
-      <div class="card">
-        <div class="top-text-wrapper">
-          <span class="date-text">3 photos</span>
-          <span class="album-text">My Home</span>
-          <span class="date-text">10MB size</span>
-        </div> 
-        <div class="album-images-wrapper">
-          <img class="album-image" src="resources/test_cropped.jpg">
-          <img class="album-image" src="resources/cat_cropped.png">
-          <img class="album-image" src="resources/cat_cropped.png">
-        </div>
-      </div>
     </div>
     <div class="add-delete-edit-wrapper">
       <button class="add-btn">➕</button>
@@ -47,7 +35,7 @@
         <input type="text" name="name" required>
 
         <span class="input-label">Album color</span>
-        <input type="color" name="color" value="#3b82f6">
+        <input type="color" name="color" value="#dbeafe">
 
         <span class="input-label">Description (Optional)</span>
         <textarea name="description" rows="3" placeholder="Add a description…"></textarea>
@@ -57,7 +45,7 @@
         <button type="button" class="close-btn add">Cancel</button>
       </div>
     </dialog>
-    <dialog>
+    <dialog class="edit-dialog">
       <form class="edit-form" id="target-">
         <span class="edit-text">Edit album</span>
 
@@ -65,15 +53,15 @@
         <input type="text" name="name" required>
 
         <span class="input-label">Album color</span>
-        <input type="color" name="color" value="#3b82f6">
+        <input type="color" name="color" value="#dbeafe">
 
         <span class="input-label">Description (Optional)</span>
         <textarea name="description" rows="3" placeholder="Add a description…"></textarea>
+        <div class="form-actions">
+          <button type="button" class="submit-btn edit">Edit album</button>
+          <button type="button" class="close-btn edit">Cancel</button>
+        </div>
       </form>
-      <div class="form-actions">
-        <button type="button" class="submit-btn edit">Edit album</button>
-        <button type="button" class="close-btn edit">Cancel</button>
-      </div>
     </dialog>
   </body>
 </html>

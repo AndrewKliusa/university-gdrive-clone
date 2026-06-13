@@ -24,3 +24,14 @@ async function catchError(input) {
     return [null, err];
   }
 }
+
+function addClassToCardsIf(condition, className) {
+  const grid = document.querySelector('.grid');
+  const cards = [...grid.children];
+
+  if (condition) {
+    cards.forEach((card) => card.classList.add(className));
+  } else {
+    cards.forEach((card) => card.classList.remove(className));
+  }
+}

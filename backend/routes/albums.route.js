@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Database } from "../database/database.js";
 import { albumCreateBodySchema, albumIdSchema, patchAlbumBodySchema } from "../schemas/album.schema.js";
 import { validate } from "../middleware/zod.js";
+import { upload } from "../middleware/multer.js";
 
 export const albumRoutes = Router();
 
@@ -14,7 +15,7 @@ albumRoutes.get("/", (req, res, next) => {
   }
 });
 
-albumRoutes.post("/", validate({ body: albumCreateBodySchema }), (req, res, next) => {
+albumRoutes.post("/", upload.none(), validate({ body: albumCreateBodySchema }), (req, res, next) => {
   try {
     const albumParams = {
       name: req.body.name,
@@ -39,7 +40,7 @@ albumRoutes.get("/:id", validate({ params: albumIdSchema }), (req, res, next) =>
   }
 });
 
-albumRoutes.patch("/:id", validate({ params: albumIdSchema, body: patchAlbumBodySchema }), (req, res, next) => {
+albumRoutes.patch("/:id", upload.none(), validate({ params: albumIdSchema, body: patchAlbumBodySchema }), (req, res, next) => {
   try {
     const existingAlbum = Database.Albums.getAlbum(req.params.id)
     if (!existingAlbum) return next({ status: 404, message: "Album with this id was not found" })

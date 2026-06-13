@@ -1,6 +1,8 @@
 let editModeActive = false;
 let deleteModeActive = false;
 
+const photosById = {}
+
 loadPhotos()
 
 document.querySelector('.submit-btn.add').addEventListener('click', async (event) => {
@@ -25,7 +27,10 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
   if (!card) return
 
   if (editModeActive) {
-    editDialog.querySelector('.edit-form').id = "target-" + card.id
+    const form = editDialog.querySelector('.edit-form')
+    form.id = "target-" + card.id
+
+    fillEditForm(form, photosById[card.id])
     editDialog.showModal()
   } else if (deleteModeActive) {
     card.remove()
@@ -35,8 +40,10 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
 
 document.querySelector('.edit-btn').addEventListener('click', async (event) => {
   editModeActive = !editModeActive
+  if (editModeActive) deleteModeActive = false
 
-  addClassToCardsIf(deleteModeActive, "edit-hover");
+  addClassToCardsIf(editModeActive, "edit-hover")
+  addClassToCardsIf(deleteModeActive, "remove-hover")
 })
 
 document.querySelector('.submit-btn.edit').addEventListener('click', async (event) => {
@@ -59,11 +66,20 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async (even
 
 document.querySelector('.remove-btn').addEventListener('click', async (event) => {
   deleteModeActive = !deleteModeActive
+  if (deleteModeActive) editModeActive = false
 
-  addClassToCardsIf(deleteModeActive, "remove-hover");
+  addClassToCardsIf(editModeActive, "edit-hover")
+  addClassToCardsIf(deleteModeActive, "remove-hover")
 })
 
+function fillEditForm(form, photoData) {
+  form.querySelector('[name="taken_at"]').value = photoData.taken_at ?? ''
+  form.querySelector('[name="album"]').value = photoData.album_id ?? ''
+  form.querySelector('[name="caption"]').value = photoData.caption ?? ''
+}
+
 function addPhoto(photoData) {
+  photosById[photoData.id] = photoData
   const cardsGrid = document.querySelector(".grid")
   cardsGrid.innerHTML += `
     <div class="card photo-hover" id="${photoData.id}">
@@ -101,15 +117,4 @@ async function removePhoto(cardId) {
   }))
 
   if (error || !response.ok) return alert("Failed to delete your photo: " + (error ? error.stack : response.status))
-}
-
-function addClassToCardsIf(condition, className) {
-  const grid = document.querySelector('.grid');
-  const cards = [...grid.children];
-
-  if (condition) {
-    cards.forEach((card) => card.classList.add(className));
-  } else {
-    cards.forEach((card) => card.classList.remove(className));
-  }
 }
