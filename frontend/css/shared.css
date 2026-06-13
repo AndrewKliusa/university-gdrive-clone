@@ -151,6 +151,7 @@ body {
 .edit-text,
 .add-text {
   font-size: 18px;
+  margin: 0;
 }
 
 .close-btn {
@@ -200,4 +201,40 @@ body {
   padding: 0 0.5rem;
   font-size: 0.75rem;
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .navigation {
+    flex-flow: column;
+    height: auto;
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+  }
+
+  .navigation-span {
+    margin-left: 0;
+  }
+
+  .nav-links {
+    margin-right: 0;
+  }
+
+  .filter-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: calc(100vw - 1.5rem);
+    padding: 0.5rem;
+  }
+
+  .filter-bar select,
+  .filter-bar input[type="date"],
+  .filter-bar input[type="text"] {
+    max-width: 100%;
+  }
+
+  .grid,
+  .people-grid {
+    justify-content: center;
+    padding-bottom: 5rem;
+  }
 }

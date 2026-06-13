@@ -10,26 +10,28 @@
   <body>
     <script src="scripts/shared.js" defer></script>
     <script src="scripts/people.js" defer></script>
-    <nav class="navigation">
+    <header>
+      <nav class="navigation">
         <span class="navigation-span">Photo Drive</span>
         <div class="nav-links">
           <a href="photos.html">Photos</a>
           <a href="albums.html">Albums</a>
           <a href="people.html">People</a>
         </div>
-    </nav>
-    <div class="people-grid">
+      </nav>
+    </header>
+    <main class="people-grid">
       <div class="person-container">
         <button class="add-person-btn">✚</button>
       </div>
-    </div>
-    <div class="filter-bar">
+    </main>
+    <section class="filter-bar" aria-label="Filter people">
       <input type="text" name="filter_search" placeholder="Search by name">
       <button type="button" class="filter-apply-btn">Apply</button>
-    </div>
+    </section>
     <dialog class="add-dialog">
       <form class="add-form">
-        <span class="add-text">Add person</span>
+        <h2 class="add-text">Add person</h2>
 
         <span class="input-label">Name</span>
         <input type="text" name="name" required>
@@ -51,7 +53,7 @@
     </dialog>
     <dialog class="edit-dialog">
       <form class="edit-form" id="target-">
-        <span class="edit-text">Edit person</span>
+        <h2 class="edit-text">Edit person</h2>
 
         <span class="input-label">Name</span>
         <input type="text" name="name" required>

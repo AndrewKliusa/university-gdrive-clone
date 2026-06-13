@@ -10,20 +10,22 @@
   <body>
     <script src="scripts/shared.js" defer></script>
     <script src="scripts/albums.js" defer></script>
-    <nav class="navigation">
+    <header>
+      <nav class="navigation">
         <span class="navigation-span">Photo Drive</span>
         <div class="nav-links">
           <a href="photos.html">Photos</a>
           <a href="albums.html">Albums</a>
           <a href="people.html">People</a>
         </div>
-    </nav>
-    <div class="grid">
-    </div>
-    <div class="filter-bar">
+      </nav>
+    </header>
+    <main class="grid">
+    </main>
+    <section class="filter-bar" aria-label="Filter albums">
       <input type="text" name="filter_search" placeholder="Search by name">
       <button type="button" class="filter-apply-btn">Apply</button>
-    </div>
+    </section>
     <div class="add-delete-edit-wrapper">
       <button class="add-btn">➕</button>
       <div class="edit-remove-container">
@@ -33,7 +35,7 @@
     </div>
     <dialog class="add-dialog">
       <form class="add-form">
-        <span class="add-text">Add album</span>
+        <h2 class="add-text">Add album</h2>
 
         <span class="input-label">Album name</span>
         <input type="text" name="name" required>
@@ -51,7 +53,7 @@
     </dialog>
     <dialog class="edit-dialog">
       <form class="edit-form" id="target-">
-        <span class="edit-text">Edit album</span>
+        <h2 class="edit-text">Edit album</h2>
 
         <span class="input-label">Album name</span>
         <input type="text" name="name" required>
