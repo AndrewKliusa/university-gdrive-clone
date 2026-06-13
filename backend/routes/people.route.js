@@ -18,7 +18,8 @@ personRoutes.post("/", validate({ body: personCreateBodySchema }), (req, res, ne
   try {
     const personParams = {
       name: req.body.name,
-      photo_id: req.body.photo_id
+      photo_id: req.body.photo_id,
+      avatar_id: req.body.avatar_id
     }
     const person = Database.Persons.addPerson(personParams)
     res.status(201).json(person)

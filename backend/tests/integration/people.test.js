@@ -1,7 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import { app } from '../../server'
 import request from 'supertest'
-import { crudBuilder, dummyPerson, dummyPersonTwo } from "../setup"
+import { Database } from "../../database/database"
+import { crudBuilder, dummyPhoto, dummyPerson, dummyPersonTwo } from "../setup"
 
 const { post: addPerson, get: getPerson, patch: updatePerson, delete: removePerson } = crudBuilder("people")
 
@@ -22,11 +23,12 @@ describe('Person routes', () => {
   })
 
   it("Edits a person", async () => {
+    const photo = Database.Photos.addPhoto(dummyPhoto)
     const postRes = await addPerson(dummyPerson)
-    const updateRes = await updatePerson(postRes.body.id, dummyPersonTwo)
+    const updateRes = await updatePerson(postRes.body.id, { name: "andrew", avatar_id: photo.id })
     
     expect(updateRes.status).toBe(200)
-    expect(updateRes.body).toMatchObject(dummyPersonTwo)
+    expect(updateRes.body).toMatchObject({ name: "andrew", avatar_id: photo.id })
   })
 
   it("Removes a person", async () => {

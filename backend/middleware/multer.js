@@ -3,7 +3,7 @@ import { join, extname } from "node:path";
 import crypto from "node:crypto";
 
 const storage = multer.diskStorage({
-  destination: join(process.cwd(), "photos"),
+  destination: join(process.cwd(), "backend", "uploads"),
   filename: (req, file, callback) => {
     const id = crypto.randomUUID();
     callback(null, id + extname(file.originalname));

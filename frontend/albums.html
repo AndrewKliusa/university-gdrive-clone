@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo Drive</title>
-    <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/albums.css">
+    <link rel="stylesheet" href="css/shared.css">
   </head>
   <body>
-    <script src="shared.js" defer></script>
+    <script src="scripts/hared.js" defer></script>
+    <script src="scripts/albums.js" defer></script>
     <nav class="navigation">
         <span class="navigation-span">Photo Drive</span>
         <div class="nav-links">
@@ -38,35 +39,21 @@
         <button class="remove-btn">🗑️</button>
       </div>
     </div>
-    <dialog id="add-dialog">
+    <dialog class="add-dialog">
       <form class="add-form">
-        <span class="add-text">Add photo</span>
-        <input type="file" accept="image/*" required>
+        <span class="add-text">Add album</span>
 
-        <span class="input-label">Choose a date</span>
-        <input type="date" required>
+        <span class="input-label">Album name</span>
+        <input type="text" name="name" required>
 
-        <span class="input-label">Select an album</span>
-        <select required>
-          <option value="">Choose an album…</option>
-          <option value="1">Wedding</option>
-          <option value="2">Honeymoon</option>
-        </select>
+        <span class="input-label">Album color</span>
+        <input type="color" name="color" value="#3b82f6">
 
-        <span class="input-label">Add people (Optional)</span>
-        <select multiple size="4">
-          <option value="1">Mother</option>
-          <option value="2">Sister</option>
-          <option value="3">Dad</option>
-          <option value="4">Friend</option>
-          <option value="5">Cousin</option>
-        </select>
-
-        <span class="input-label">Add description (Optional)</span>
-        <textarea rows="3" placeholder="Add a description…"></textarea>
+        <span class="input-label">Description (Optional)</span>
+        <textarea name="description" rows="3" placeholder="Add a description…"></textarea>
       </form>
       <div class="form-actions">
-        <button type="submit" class="submit-btn">Add photo</button>
+        <button type="button" class="submit-btn">Add album</button>
         <button type="button" class="close-btn">Cancel</button>
       </div>
     </dialog>

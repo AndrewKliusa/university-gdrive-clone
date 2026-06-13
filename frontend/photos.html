@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="css/shared.css">
   </head>
   <body>
-    <script src="shared.js" defer></script>
-    <script src="photo.js" defer></script>
+    <script src="scripts/shared.js" defer></script>
+    <script src="scripts/photo.js" defer></script>
     <nav class="navigation">
         <span class="navigation-span">Photo Drive</span>
         <div class="nav-links">
@@ -19,35 +19,6 @@
         </div>
     </nav>
     <div class="grid">
-      <div class="card photo-hover">
-        <div class="photo-top">
-          <span class="date-text">04.03.08</span>
-          <div class="people-images-wrapper">
-            <img class="person-image" src="resources/test_cropped.jpg">
-            <img class="person-image" src="resources/cat_cropped.png">
-            <img class="person-image" src="resources/cat_cropped.png">
-            <img class="person-image" src="resources/cat_cropped.png">
-            <img class="person-image" src="resources/cat_cropped.png">
-          </div>
-          <span class="album-text">My Home</span>
-        </div>
-        <img class="main-image" src="resources/cat.png">
-        <span class="card-caption">sdfgfsgsfdgsfd sdfgdfsgfsgsdfgd dfsgsdfgdf</span>
-      </div>
-      <div class="card photo-hover">
-        <div class="photo-top">
-          <span class="date-text">04 March 2008</span>
-          <div class="people-images-wrapper">
-            <img class="person-image" src="resources/test_cropped.jpg">
-            <img class="person-image" src="resources/cat_cropped.png">
-          </div>
-          <div class="album-text">
-            <span >Me</span>
-          </div>
-        </div>
-        <img class="main-image" src="resources/cat.png">
-        <span class="card-caption">sdfgfsgsfdgsfd sdfgdfsgfsgsdfgd dfsgsdfgdf</span>
-      </div>
     </div>
     <div class="add-delete-edit-wrapper">
       <button class="add-btn">➕</button>
@@ -61,8 +32,8 @@
         <span class="add-text">Add photo</span>
         <input type="file" name="photo" accept="image/*" required>
 
-        <span class="input-label">Choose a date</span>
-        <input type="date" name="date" required>
+        <span class="input-label">Photo date</span>
+        <input type="date" name="taken_at" required>
 
         <span class="input-label">Select an album</span>
         <select name="album" required>
@@ -81,10 +52,10 @@
         </select>
 
         <span class="input-label">Add description (Optional)</span>
-        <textarea name="description" rows="3" placeholder="Add a description…"></textarea>
+        <textarea name="caption" rows="3" placeholder="Add a description…"></textarea>
       </form>
       <div class="form-actions">
-        <button type="submit" class="submit-btn">Add photo</button>
+        <button type="button" class="submit-btn">Add photo</button>
         <button type="button" class="close-btn">Cancel</button>
       </div>
     </dialog>

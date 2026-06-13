@@ -39,7 +39,8 @@ export class PhotoManager {
     `)
     const result = addQuery.run(normalizedParams)
 
-    return { ...params, id: result.lastInsertRowid }
+    const photo = this.Database.prepare('SELECT * FROM photo WHERE id = ?').get(result.lastInsertRowid)
+    return { ...photo, created_at: normalizeDate(photo.created_at) }
   }
 
   /**
@@ -54,7 +55,7 @@ export class PhotoManager {
   getAllPhotos() {
     const getAllQuery = this.Database.prepare('SELECT * FROM photo ORDER BY created_at DESC')
     const results = getAllQuery.all()
-    return results.map(r => ({ ...r, created_at: new Date(r.created_at) }))
+    return results.map(r => ({ ...r, created_at: normalizeDate(r.created_at) }))
   }
 
   /**
@@ -65,7 +66,7 @@ export class PhotoManager {
     const getQuery = this.Database.prepare('SELECT * FROM photo WHERE id = @id')
     const result = getQuery.get({ id })
 
-    return result ? { ...result, created_at: new Date(result.created_at) } : null
+    return result ? { ...result, created_at: normalizeDate(result.created_at) } : null
   }
 
   /**
@@ -113,4 +114,14 @@ export class PhotoManager {
   removeAllPhotos() {
     this.Database.exec(`DELETE FROM photo`)
   }
+}
+
+function normalizeDate(date) {
+  date = new Date(date);
+
+  const day = String(date.getUTCDate()).padStart(2, "0");
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const year = String(date.getUTCFullYear()).slice(2);
+
+  return `${day}.${month}.${year}`;
 }

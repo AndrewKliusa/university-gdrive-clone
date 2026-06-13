@@ -7,6 +7,7 @@ export class PersonManager {
    * @typedef {Object} AddPersonParams
    * @property {string} name
    * @property {number} [photo_id]
+   * @property {number} [avatar_id]
    */
 
   /**
@@ -22,12 +23,13 @@ export class PersonManager {
   addPerson(params) {
     const normalizedParams = {
       name: params.name,
-      photo_id: params.photo_id ?? null
+      photo_id: params.photo_id ?? null,
+      avatar_id: params.avatar_id ?? null
     }
 
     const addQuery = this.Database.prepare(`
-      INSERT INTO person (name, photo_id) 
-      VALUES (@name, @photo_id)
+      INSERT INTO person (name, photo_id, avatar_id) 
+      VALUES (@name, @photo_id, @avatar_id)
     `)
     const result = addQuery.run(normalizedParams)
 
@@ -62,6 +64,7 @@ export class PersonManager {
    * @typedef {Object} EditPersonData
    * @property {string} [name]
    * @property {number} [photo_id]
+   * @property {number} [avatar_id]
   */
 
   /**
@@ -72,7 +75,8 @@ export class PersonManager {
     /** @type {string[]} Array that ensures only allowed fields can be passed into update function, to prevent SQL Injections.*/
     const allowedFields = [
       "name",
-      "photo_id"
+      "photo_id",
+      "avatar_id"
     ]
 
     const fields = Object.keys(data).filter(field => allowedFields.includes(field))
