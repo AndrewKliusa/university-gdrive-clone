@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/shared.css">
   </head>
   <body>
-    <script src="scripts/hared.js" defer></script>
+    <script src="scripts/shared.js" defer></script>
     <script src="scripts/albums.js" defer></script>
     <nav class="navigation">
         <span class="navigation-span">Photo Drive</span>
@@ -53,8 +53,26 @@
         <textarea name="description" rows="3" placeholder="Add a description…"></textarea>
       </form>
       <div class="form-actions">
-        <button type="button" class="submit-btn">Add album</button>
-        <button type="button" class="close-btn">Cancel</button>
+        <button type="button" class="submit-btn add">Add album</button>
+        <button type="button" class="close-btn add">Cancel</button>
+      </div>
+    </dialog>
+    <dialog>
+      <form class="edit-form" id="target-">
+        <span class="edit-text">Edit album</span>
+
+        <span class="input-label">Album name</span>
+        <input type="text" name="name" required>
+
+        <span class="input-label">Album color</span>
+        <input type="color" name="color" value="#3b82f6">
+
+        <span class="input-label">Description (Optional)</span>
+        <textarea name="description" rows="3" placeholder="Add a description…"></textarea>
+      </form>
+      <div class="form-actions">
+        <button type="button" class="submit-btn edit">Edit album</button>
+        <button type="button" class="close-btn edit">Cancel</button>
       </div>
     </dialog>
   </body>

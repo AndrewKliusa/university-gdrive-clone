@@ -25,7 +25,7 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
   if (!card) return
 
   if (editModeActive) {
-    editDialog.querySelector('.edit-form').id += card.id
+    editDialog.querySelector('.edit-form').id = "target-" + card.id
     editDialog.showModal()
   } else if (deleteModeActive) {
     card.remove()
