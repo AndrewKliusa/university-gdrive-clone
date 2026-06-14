@@ -3,6 +3,15 @@ A personal **photo** organizer. The owner uploads photos, groups them into **alb
 
 > You can the project by starting the server using `npm start` and opening any of the html files in the browser.
 
+## Table of contents
+
+- [Frontend](#frontend)
+- [Backend](#backend)
+- [Design Decisions](#design-decisions)
+- [Project structure](#project-structure)
+- [Wireframes](#wireframes)
+- [Sequence diagrams](#sequence-diagrams)
+
 Pages:
 * [photos.html](../frontend/photos.html): List of all photos. Displays information about photo album, people in the photo and date of the photo. Filterable by album, person and date range.
 * [albums.html](../frontend/albums.html): List of all albums. Displays information about the album and the photos in the album. Filterable by name.
