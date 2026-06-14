@@ -1,9 +1,9 @@
 .main-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
-  height: 7.5rem;
-  margin-left: 5px;
-  margin-right: 5px;
-
+  object-position: center;
 }
 
 .person-image {

@@ -4,7 +4,7 @@ const personsById = {}
 
 const getModes = setupEditDeleteModes()
 
-loadPhotos()
+seedReady.then(loadPhotos)
 
 document.querySelector('.filter-apply-btn').addEventListener('click', fetchPhotos)
 

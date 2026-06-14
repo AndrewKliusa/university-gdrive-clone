@@ -1,7 +1,7 @@
 const personsById = {}
 const photosById = {}
 
-loadPeople()
+seedReady.then(loadPeople)
 
 document.querySelector('.filter-apply-btn').addEventListener('click', loadPeople)
 

@@ -37,7 +37,7 @@ body {
 .people-grid {
   flex: 1;
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   gap: 10px;
   padding: 10px;
   padding-bottom: 3.5rem;
@@ -45,10 +45,6 @@ body {
   background-color: rgb(0, 136, 255);
   margin: 0.3rem;
   border-radius: 20px;
-}
-
-.grid {
-  flex-flow: row;
 }
 
 .people-grid {

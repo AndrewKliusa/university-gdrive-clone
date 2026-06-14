@@ -2,6 +2,8 @@ const apiUrl = 'http://localhost:3000'
 const placeholder = 'resources/cat_cropped.png'
 const uploadUrl = (hash) => `${apiUrl}/uploads/${hash}`
 
+const seedReady = fetch(`${apiUrl}/seed`, { method: 'POST' })
+
 const addDialog = document.querySelector('.add-dialog')
 const editDialog = document.querySelector('.edit-dialog')
 
