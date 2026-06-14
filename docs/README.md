@@ -4,6 +4,12 @@ A personal **photo** organizer. The owner uploads photos, groups them into **alb
 <br>
 Student: Andrew Kliusa (578848)
 
+![Photos page screenshot](../docs/screenshot_photos.png)
+![Albums page screenshot](../docs/screenshot_albums.png)
+![People page screenshot](../docs/screenshot_people.png)
+<br>
+*Vegetables are used isntead of people for illustration purposes* 
+
 > You can run the project by starting the server using `npm start` and opening any of the html files in the browser.
 
 ## Table of contents
