@@ -1,7 +1,8 @@
 # Photo Drive Website
 A personal **photo** organizer. The owner uploads photos, groups them into **albums** (e.g. Wedding, Honeymoon), and tags the **people** who appear in each photo (e.g. Mother, Sister). The app shows a list of photos, filterable by album or person, with summary stats (photo count, total size, date range) per album and per person.
-
-- Student: Andrew Kliusa (578848)
+<br>
+<br>
+Student: Andrew Kliusa (578848)
 
 > You can the project by starting the server using `npm start` and opening any of the html files in the browser.
 
