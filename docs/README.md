@@ -261,5 +261,3 @@ sequenceDiagram
 | 15 | Each photo rendered via `addPhoto()` | [`photos.js` (147–148, 88–118)](../frontend/scripts/photos.js#L147-L148) |
 
 Filtering is triggered only by clicking the "Apply" button. The frontend turns filter bar values into query params. Zod coerces and validates them server side. When filtering by person, SQL adds an `INNER JOIN` on `photo_people`; album and date filters add `WHERE` clauses on `photo.album_id` and `photo.taken_at`. Each result is extended with `people_ids` so cards can show avatars without extra requests.
-
-On first page load, [`loadPhotos`](../frontend/scripts/photos.js#L151-L195) runs once to fetch albums and people (for dropdowns), then calls [`fetchPhotos`](../frontend/scripts/photos.js#L120-L149)-the same function used when Apply is clicked.
