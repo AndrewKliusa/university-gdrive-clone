@@ -2,7 +2,7 @@ Table album {
   id integer [primary key, increment]
   name text [not null]
   color text
-  photo_id integer [note: 'Optional cover photo']
+  photo_id integer
   description text
   created_at text [not null, default: `CURRENT_TIMESTAMP`]
 }

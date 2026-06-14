@@ -4,10 +4,10 @@
   align-items: center;
   background-color: rgb(139, 223, 246);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-size: large;
+  font-size: 1.1rem;
   font-weight: 700;
-  height: 50px;
-  border-radius: 20px;
+  height: 3.1rem;
+  border-radius: 1.2rem;
   margin-left: 0.3rem;
   margin-right: 0.3rem;
   margin-top: 0.6rem;
@@ -38,13 +38,13 @@ body {
   flex: 1;
   display: flex;
   flex-flow: row wrap;
-  gap: 10px;
-  padding: 10px;
+  gap: 0.6rem;
+  padding: 0.6rem;
   padding-bottom: 3.5rem;
   align-items: start;
   background-color: rgb(0, 136, 255);
   margin: 0.3rem;
-  border-radius: 20px;
+  border-radius: 1.2rem;
 }
 
 .people-grid {
@@ -56,7 +56,7 @@ body {
   display: inline-block;
   text-align: center;
   border: 1px solid;
-  border-radius: 20px;
+  border-radius: 1.2rem;
   width: fit-content;
   height: 1rem;
   justify-content: center;
@@ -66,7 +66,7 @@ body {
 .card {
   width: 12.5rem;
   border: 0.5px solid;
-  border-radius: 15px;
+  border-radius: 0.9rem;
   background: #dbeafe;
   display: flex;
   flex-flow: column;
@@ -74,12 +74,12 @@ body {
 }
 
 .edit-hover:hover {
-  border: 3px solid;
+  border: 0.2rem solid;
   border-color: yellow;
 }
 
 .remove-hover:hover {
-  border: 3px solid;
+  border: 0.2rem solid;
   border-color: red;
 }
 
@@ -90,13 +90,13 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  margin: 10px
+  margin: 0.6rem
 }
 
 .edit-remove-container > *,
 .add-delete-edit-wrapper > .add-btn {
   border: 1px solid;
-  border-radius: 20px;
+  border-radius: 1.2rem;
   width: 2rem;
   height: 2rem;
   transition: transform 0.25s ease;
@@ -152,19 +152,19 @@ body {
 
 .edit-text,
 .add-text {
-  font-size: 18px;
+  font-size: 1.1rem;
   margin: 0;
 }
 
 .close-btn {
   border: 1px solid;
-  border-radius: 15px;
+  border-radius: 0.9rem;
   background-color: rgb(244, 75, 75);
 }
 
 .submit-btn {
   border: 1px solid;
-  border-radius: 15px;
+  border-radius: 0.9rem;
   background-color: rgb(75, 239, 75)
 }
 
@@ -173,39 +173,39 @@ body {
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  margin-bottom: 10px;
+  margin-bottom: 0.6rem;
   display: flex;
   flex-flow: row;
   align-items: center;
   gap: 0.4rem;
   background-color: #dbeafe;
   border: 1px solid;
-  border-radius: 15px;
+  border-radius: 0.9rem;
   padding: 0.4rem 0.6rem;
   z-index: 1;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
 }
 
 .filter-bar select,
 .filter-bar input[type="date"],
 .filter-bar input[type="text"] {
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   height: 1.5rem;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   border: 1px solid;
 }
 
 .filter-apply-btn {
   border: 1px solid;
-  border-radius: 10px;
+  border-radius: 0.6rem;
   background-color: rgb(139, 223, 246);
   height: 1.5rem;
   padding: 0 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   cursor: pointer;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 37.5rem) {
   .navigation {
     flex-flow: column;
     height: auto;

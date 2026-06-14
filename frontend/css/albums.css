@@ -19,7 +19,7 @@
   width: 5rem;
   height: 5rem;
   margin-left: -3rem;
-  border-radius: 20px;
+  border-radius: 1.2rem;
   transition: transform 0.25s ease;
 }
 
@@ -48,5 +48,5 @@
   grid-template-columns: auto auto auto;
   justify-content: space-between;
   align-items: center;
-  margin: 0.30rem;
+  margin: 0.3rem;
 }
