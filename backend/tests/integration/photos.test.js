@@ -125,7 +125,6 @@ describe('Photo routes', () => {
   it("Filters photos by person_id via photo_people", async () => {
     const avatar = Database.Photos.addPhoto(dummyPhotoTwo)
     const linked = Database.Photos.addPhoto({ ...dummyPhoto, taken_at: "2024-06-01" })
-    const other = Database.Photos.addPhoto({ ...dummyPhotoTwo, name: "other", hash: "456", taken_at: "2024-07-01" })
     const person = Database.Persons.addPerson({ name: "Alice", photo_id: linked.id, avatar_id: avatar.id })
     Database.Photos.setPhotoPeople(linked.id, [person.id])
 

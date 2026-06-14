@@ -59,20 +59,10 @@ function getAvatarSrc(person, photosById) {
   return avatar ? uploadUrl(avatar.hash) : placeholder
 }
 
-async function fetchRequest(promise, action) {
-  let response
-
+async function catchError(fn) {
   try {
-    response = await promise
+    return [await Promise.try(fn), null];
   } catch (err) {
-    alert(`Failed to ${action}: ${err.message}`)
-    return
+    return [null, err];
   }
-
-  if (response.ok) return response
-
-  const body = await response.json().catch(() => null)
-  const message = body?.error ?? 'Something went wrong. Please try again.'
-
-  alert(`Failed to ${action}: ${message}`)
 }

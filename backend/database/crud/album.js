@@ -6,7 +6,7 @@ export class AlbumManager {
   }
 
   /**
-   * @typedef {Object} AddAldumParams
+   * @typedef {Object} AddAlbumParams
    * @property {string} name
    * @property {string} color
    * @property {number} photo_id

@@ -11,15 +11,17 @@ document.querySelector('.submit-btn.add').addEventListener('click', async () => 
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
 
-  const response = await fetchRequest(fetch(`${apiUrl}/albums`, {
+  const [response, error] = await catchError(() => fetch(`${apiUrl}/albums`, {
     method: 'POST',
     body: data
-  }), 'create your album')
-  if (!response) return
+  }))
+  if (error) return alert(`Failed to create your album: ${error.message}`)
 
-  const responseData = await response.json()
+  const [responseData, parseError] = await catchError(() => response.json())
+  if (parseError) return alert(`Failed to create your album: ${parseError.message}`)
+  if (!response.ok) return alert(`Failed to create your album: ${responseData?.error ?? 'Something went wrong. Please try again.'}`)
+
   addAlbum(responseData)
-
   addDialog.close()
 })
 
@@ -40,10 +42,15 @@ document.querySelector('.grid').addEventListener('click', async (event) => {
 
     editDialog.showModal()
   } else if (deleteModeActive) {
-    const response = await fetchRequest(fetch(`${apiUrl}/albums/${card.id}`, {
+    const [response, error] = await catchError(() => fetch(`${apiUrl}/albums/${card.id}`, {
       method: 'DELETE',
-    }), 'delete your album')
-    if (!response) return
+    }))
+    if (error) return alert(`Failed to delete your album: ${error.message}`)
+      
+    if (!response.ok) {
+      const [body] = await catchError(() => response.json())
+      return alert(`Failed to delete your album: ${body?.error ?? 'Something went wrong. Please try again.'}`)
+    }
 
     card.remove()
     delete albumsById[card.id]
@@ -55,11 +62,16 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async () =>
   const data = new FormData(form)
   const albumId = form.id.split('-')[1]
 
-  const response = await fetchRequest(fetch(`${apiUrl}/albums/${albumId}`, {
+  const [response, error] = await catchError(() => fetch(`${apiUrl}/albums/${albumId}`, {
     method: 'PATCH',
     body: data
-  }), 'edit your album')
-  if (!response) return
+  }))
+  if (error) return alert(`Failed to edit your album: ${error.message}`)
+
+  if (!response.ok) {
+    const [body] = await catchError(() => response.json())
+    return alert(`Failed to edit your album: ${body?.error ?? 'Something went wrong. Please try again.'}`)
+  }
 
   editDialog.close()
   await loadAlbums()
@@ -105,12 +117,15 @@ async function loadAlbums() {
   document.querySelector('.grid').innerHTML = ''
   for (const id of Object.keys(albumsById)) delete albumsById[id]
 
-  const photosRes = await fetchRequest(fetch(`${apiUrl}/photos`, {
+  const [photosRes, photosError] = await catchError(() => fetch(`${apiUrl}/photos`, {
     method: 'GET',
-  }), 'load photos')
-  if (!photosRes) return
+  }))
+  if (photosError) return alert(`Failed to load photos: ${photosError.message}`)
 
-  const photosData = await photosRes.json()
+  const [photosData, photosParseError] = await catchError(() => photosRes.json())
+  if (photosParseError) return alert(`Failed to load photos: ${photosParseError.message}`)
+  if (!photosRes.ok) return alert(`Failed to load photos: ${photosData?.error ?? 'Something went wrong. Please try again.'}`)
+
   for (const id of Object.keys(photosByAlbumId)) delete photosByAlbumId[id]
 
   photosData.forEach(photo => {
@@ -119,11 +134,14 @@ async function loadAlbums() {
     photosByAlbumId[photo.album_id].push(photo)
   })
 
-  const response = await fetchRequest(fetch(`${apiUrl}/albums${query ? `?${query}` : ''}`, {
+  const [response, error] = await catchError(() => fetch(`${apiUrl}/albums${query ? `?${query}` : ''}`, {
     method: 'GET',
-  }), 'load albums')
-  if (!response) return
+  }))
+  if (error) return alert(`Failed to load albums: ${error.message}`)
 
-  const responseData = await response.json()
+  const [responseData, parseError] = await catchError(() => response.json())
+  if (parseError) return alert(`Failed to load albums: ${parseError.message}`)
+  if (!response.ok) return alert(`Failed to load albums: ${responseData?.error ?? 'Something went wrong. Please try again.'}`)
+
   responseData.forEach(addAlbum)
 }

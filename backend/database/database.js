@@ -1,8 +1,6 @@
 import DatabaseDriver from 'better-sqlite3'
 import dotenv from 'dotenv'
 import { readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import { dirname, join } from 'node:path'
 import { PhotoManager } from './crud/photos.js'
 import { AlbumManager } from './crud/album.js'
 import { PersonManager } from './crud/person.js'

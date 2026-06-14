@@ -13,15 +13,17 @@ document.querySelector('.submit-btn.add').addEventListener('click', async () => 
   const form = document.querySelector('.add-form')
   const data = new FormData(form)
 
-  const response = await fetchRequest(fetch(`${apiUrl}/people`, {
+  const [response, error] = await catchError(() => fetch(`${apiUrl}/people`, {
     method: 'POST',
     body: data
-  }), 'add your person')
-  if (!response) return
+  }))
+  if (error) return alert(`Failed to add your person: ${error.message}`)
 
-  const responseData = await response.json()
+  const [responseData, parseError] = await catchError(() => response.json())
+  if (parseError) return alert(`Failed to add your person: ${parseError.message}`)
+  if (!response.ok) return alert(`Failed to add your person: ${responseData?.error ?? 'Something went wrong. Please try again.'}`)
+
   addPerson(responseData)
-
   addDialog.close()
 })
 
@@ -40,10 +42,14 @@ document.querySelector('.people-grid').addEventListener('click', async (event) =
 
     editDialog.showModal()
   } else if (event.target.closest('.delete-overlay')) {
-    const response = await fetchRequest(fetch(`${apiUrl}/people/${wrapper.id}`, {
+    const [response, error] = await catchError(() => fetch(`${apiUrl}/people/${wrapper.id}`, {
       method: 'DELETE',
-    }), 'delete your person')
-    if (!response) return
+    }))
+    if (error) return alert(`Failed to delete your person: ${error.message}`)
+    if (!response.ok) {
+      const [body] = await catchError(() => response.json())
+      return alert(`Failed to delete your person: ${body?.error ?? 'Something went wrong. Please try again.'}`)
+    }
 
     wrapper.remove()
     delete personsById[wrapper.id]
@@ -55,11 +61,16 @@ document.querySelector('.submit-btn.edit').addEventListener('click', async () =>
   const data = new FormData(form)
   const personId = form.id.split('-')[1]
 
-  const response = await fetchRequest(fetch(`${apiUrl}/people/${personId}`, {
+  const [response, error] = await catchError(() => fetch(`${apiUrl}/people/${personId}`, {
     method: 'PATCH',
     body: data
-  }), 'edit your person')
-  if (!response) return
+  }))
+  if (error) return alert(`Failed to edit your person: ${error.message}`)
+    
+  if (!response.ok) {
+    const [body] = await catchError(() => response.json())
+    return alert(`Failed to edit your person: ${body?.error ?? 'Something went wrong. Please try again.'}`)
+  }
 
   editDialog.close()
   await loadPeople()
@@ -86,12 +97,15 @@ function addPerson(personData) {
 
 async function loadPeople() {
   if (!Object.keys(photosById).length) {
-    const photosRes = await fetchRequest(fetch(`${apiUrl}/photos`, {
+    const [photosRes, photosError] = await catchError(() => fetch(`${apiUrl}/photos`, {
       method: 'GET',
-    }), 'load photos')
-    if (!photosRes) return
+    }))
+    if (photosError) return alert(`Failed to load photos: ${photosError.message}`)
 
-    const photosData = await photosRes.json()
+    const [photosData, photosParseError] = await catchError(() => photosRes.json())
+    if (photosParseError) return alert(`Failed to load photos: ${photosParseError.message}`)
+    if (!photosRes.ok) return alert(`Failed to load photos: ${photosData?.error ?? 'Something went wrong. Please try again.'}`)
+
     photosData.forEach(photo => { photosById[photo.id] = photo })
 
     const options = Object.values(photosById)
@@ -111,11 +125,14 @@ async function loadPeople() {
   document.querySelectorAll('.avatar-name-wrapper').forEach(el => el.remove())
   for (const id of Object.keys(personsById)) delete personsById[id]
 
-  const response = await fetchRequest(fetch(`${apiUrl}/people${query ? `?${query}` : ''}`, {
+  const [response, error] = await catchError(() => fetch(`${apiUrl}/people${query ? `?${query}` : ''}`, {
     method: 'GET',
-  }), 'load your people')
-  if (!response) return
+  }))
+  if (error) return alert(`Failed to load your people: ${error.message}`)
 
-  const responseData = await response.json()
+  const [responseData, parseError] = await catchError(() => response.json())
+  if (parseError) return alert(`Failed to load your people: ${parseError.message}`)
+  if (!response.ok) return alert(`Failed to load your people: ${responseData?.error ?? 'Something went wrong. Please try again.'}`)
+
   responseData.forEach(addPerson)
 }
