@@ -1,5 +1,5 @@
 # Photo Drive Website
-A personal <u>**photo**</u> organizer. The owner uploads photos, groups them into <u>**albums**</u> (e.g. Wedding, Honeymoon), and tags the <u>**people**</u> who appear in each photo (e.g. Mother, Sister). The app shows a list of photos, filterable by album or person, with summary stats (photo count, total size, date range) per album and per person.
+A personal <ins>**photo**</ins> organizer. The owner uploads photos, groups them into <ins>**albums**</ins> (e.g. Wedding, Honeymoon), and tags the <ins>**people**</ins> who appear in each photo (e.g. Mother, Sister). The app shows a list of photos, filterable by album or person, with summary stats (photo count, total size, date range) per album and per person.
 <br>
 <br>
 Student: Andrew Kliusa (578848)
