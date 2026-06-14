@@ -4,8 +4,8 @@ import { Database } from './database.js'
 
 const uploadsDir = 'backend/uploads'
 
-const catFiles = ['cat1.jpg', 'cat2.jpg', 'cat3pg.jpg', 'cat4.jpg', 'cat5jpg.jpg']
-const dogFiles = ['dog1.jpg', 'dog2jpg.jpg', 'dog3.jpg', 'dog4.jpg', 'dog5jpg.jpg']
+const catFiles = ['cat1.jpg', 'cat2.jpg', 'cat3.jpg', 'cat4.jpg', 'cat5.jpg']
+const dogFiles = ['dog1.jpg', 'dog2.jpg', 'dog3.jpg', 'dog4.jpg', 'dog5.jpg']
 
 const veggieSingles = [
   { file: 'brocoli.jpg', name: 'Broccoli' },

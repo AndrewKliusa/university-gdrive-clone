@@ -1,3 +1,5 @@
+import { normalizeDate } from './photos.js'
+
 export class AlbumManager {
   constructor(Database) {
     this.Database = Database
@@ -52,7 +54,7 @@ export class AlbumManager {
     const getQuery = this.Database.prepare('SELECT * FROM album WHERE id = @id')
     const result = getQuery.get({ id })
 
-    return result ? { ...result, created_at: new Date(result.created_at) } : null
+    return result ? { ...result, created_at: normalizeDate(result.created_at) } : null
   }
 
   /**
@@ -71,7 +73,7 @@ export class AlbumManager {
 
     const getAllQuery = this.Database.prepare(sql)
     const results = getAllQuery.all(params)
-    return results.map(r => ({ ...r, created_at: new Date(r.created_at) }))
+    return results.map(r => ({ ...r, created_at: normalizeDate(r.created_at) }))
   }
 
   /**

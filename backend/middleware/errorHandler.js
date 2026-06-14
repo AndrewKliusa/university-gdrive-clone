@@ -21,7 +21,7 @@ function formatZodIssues(issues) {
     const key = issue.path?.[0]
     const label = fieldLabels[key] ?? (key ? String(key).replaceAll('_', ' ') : 'Photo file')
 
-    if (issue.code === 'invalid_type' && (issue.input === undefined || issue.received === 'undefined')) {
+    if (issue.code === 'invalid_type' && (!issue.input || !issue.received)) {
       return `${label} is required`
     }
     if (issue.code === 'too_small' && issue.minimum === 1) {

@@ -183,12 +183,12 @@ export class PhotoManager {
   }
 }
 
-function normalizeDate(date) {
-  date = new Date(date);
+export function normalizeDate(date) {
+  date = new Date(date)
 
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const year = String(date.getUTCFullYear()).slice(2);
+  const day = String(date.getUTCDate()).padStart(2, "0")
+  const month = String(date.getUTCMonth() + 1).padStart(2, "0")
+  const year = String(date.getUTCFullYear()).slice(2)
 
-  return `${day}.${month}.${year}`;
+  return `${day}.${month}.${year}`
 }
