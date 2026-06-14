@@ -141,8 +141,10 @@ photo-drive/
 ### Wireframes
 **Photos**
 ![Photos page wireframe](../docs/wireframes/photos.png)
+<br>
 **Albums**
 ![Albums page wireframe](../docs/wireframes/albums.png)
+<br>
 **People**
 ![People page wireframe](../docs/wireframes/people.png)
 
