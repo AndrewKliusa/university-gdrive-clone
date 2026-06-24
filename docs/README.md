@@ -8,7 +8,7 @@ Student: Andrew Kliusa (578848)
 ![Albums page screenshot](../docs/screenshot_albums.png)
 ![People page screenshot](../docs/screenshot_people.png)
 <br>
-*Vegetables are used isntead of people for illustration purposes* 
+*Vegetables are used instead of people for illustration purposes* 
 
 > You can run the project by starting the server using `npm start` and opening any of the html files in the browser.
 
@@ -20,6 +20,64 @@ Student: Andrew Kliusa (578848)
 - [Project structure](#project-structure)
 - [Wireframes](#wireframes)
 - [Sequence diagrams](#sequence-diagrams)
+- [AI usage](#ai-usage)
+
+<details>
+  <summary>Constraints set by University for this project:</summary>
+  - The application must consist of a separate frontend and backend
+  <br>
+  - The frontend must be written in HTML, CSS, and JavaScript
+  <br>
+  - The backend must be written in JavaScript using Node.js and Express
+  <br>
+  - The backend must follow a REST specification, including correct status codes
+  - The backend must consist of at least three resources that are related to each other
+  <br>
+  - At least one resource must have a one-to-many relationship with another resource
+  <br>
+  - The backend must implement full CRUD (Create, Read, Update, Delete) functionality for at
+  least two resources
+  <br>
+  - CRUD functionality must use the correct HTTP methods (GET, POST, PUT, DELETE)
+  <br>
+  - The backend must store its data in an SQLite database
+  <br>
+  - At least 3 backend endpoints must use query parameters
+  <br>
+  - At least 3 backend endpoints must use path parameters
+  <br>
+  - The frontend must consist of multiple pages (HTML), fully styled (CSS) and functional
+  (JavaScript)
+  <br>
+  - The frontend must be responsive, using appropriate measurement units and media queries
+  <br>
+  - Pages must retrieve data from your own backend using the Fetch API
+  <br>
+  - Pages must send new data to your backend using the Fetch API
+  <br>
+  - Fetch API calls must include error handling, including checking for status codes
+  <br>
+  - Pages must validate form input using JavaScript and built-in HTML form validation
+  <br>
+  - The frontend must be runnable by opening index.html and must not use package managers
+  - CSS must be written manually; the use of existing CSS frameworks is not allowed
+  <br>
+  - JavaScript must be written without external frameworks
+  <br>
+  - The REST specification of the backend must be fully documented, including all possible
+  status codes and example requests and responses
+  <br>
+  - At least two (more complex) requests must be documented using sequence diagrams
+  <br>
+  - The database design is documented using a database diagram
+  <br>
+  - Design decisions must be documented
+  <br>
+  - The application must consist of two separate projects: a folder containing the Node.js/Express
+</details>
+In a nutshell: Use vanilla JS, CSS and HTML; No frameworks. Backend must be Node.js, Express and SQLite. Don't implement authentication.
+<br>
+<br>
 
 Pages:
 * [photos.html](../frontend/photos.html): List of all photos. Displays information about photo album, people in the photo and date of the photo. Filterable by album, person and date range.
@@ -267,3 +325,6 @@ sequenceDiagram
 | 15 | Each photo rendered via `addPhoto()` | [`photos.js` (147–148, 88–118)](../frontend/scripts/photos.js#L147-L148) |
 
 Filtering is triggered only by clicking the "Apply" button. The frontend turns filter bar values into query params. Zod coerces and validates them server side. When filtering by person, SQL adds an `INNER JOIN` on `photo_people`, album and date filters add `WHERE` clauses on `photo.album_id` and `photo.taken_at`. Each result is extended with `people_ids` so cards can show avatars without extra requests.
+
+### AI Usage
+AI was only used to assist in writing client side code (e.g code in [/scripts](../frontend/scripts/) folder). Every other code in this project was writen by me. AI also helped building the sequence diagrams and code traces for this application, as it is very convient and saves a lot of time.
